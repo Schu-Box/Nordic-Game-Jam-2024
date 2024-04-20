@@ -9,8 +9,10 @@ public class Line : MonoBehaviour
     
     public DragPoint origin;
     public DragPoint destination;
-    
-    public void Generate(DragPoint origin, DragPoint destination)
+
+    public bool isStartingGate = false;
+
+    public void Generate(DragPoint origin, DragPoint destination, bool startingGate = false)
     {
         this.origin = origin;
         this.destination = destination;
@@ -28,6 +30,8 @@ public class Line : MonoBehaviour
         edgeCollider = gameObject.AddComponent<EdgeCollider2D>();
         edgeCollider.points = new Vector2[] { origin.transform.position, destination.transform.position };
         edgeCollider.edgeRadius = LineManager.Instance.edgeColliderRadius;
+
+        isStartingGate = startingGate;
 
     }
 

@@ -6,6 +6,9 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public static GameController Instance;
+
+    public DragPoint starterGateLeft;
+    public DragPoint starterGateRight;
     
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI scoreText;
@@ -14,9 +17,10 @@ public class GameController : MonoBehaviour
 
     public float timeLimit = 60f;
 
-    private float timer;
-    private int score;
+    public float timer;
+    public int score;
 
+    public bool gameStarted = false;
     public bool gameOver = false;
     
     private void Awake()
@@ -28,8 +32,28 @@ public class GameController : MonoBehaviour
         timer = timeLimit;
     }
 
+    private void Start()
+    {
+        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight);
+    }
+
+    public void StartGame()
+    {
+        gameStarted = true;
+        
+        //TODO: Lock playerName
+    }
+
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+        
+        if (!gameStarted || gameOver)
+            return;
+        
         timer -= Time.deltaTime;
         timerText.text = timer.ToString("F1");
         
@@ -37,11 +61,6 @@ public class GameController : MonoBehaviour
         {
             timer = 0;
             GameOver();
-        }
-        
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
     }
     
@@ -55,5 +74,7 @@ public class GameController : MonoBehaviour
     {
         GameOverUI.SetActive(true);
         gameOver = true;
+
+        Leaderboard.Instance.FinalizeScore("placeholder");
     }
 }

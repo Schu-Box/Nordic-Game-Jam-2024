@@ -81,9 +81,15 @@ public class DragPoint : MonoBehaviour
         if (GameController.Instance.gameOver)
             return;
         
-        // Debug.Log("Dragging");
+        Vector2 destinationPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        DragPoint overlappingDragPoint = OverlappingDragPoint(destinationPosition);
+        if (overlappingDragPoint != null)
+        {
+            destinationPosition = overlappingDragPoint.transform.position;
+        }
 
-        InputManager.Instance.ShowLineCreation(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        Debug.Log(transform.position + " to " + destinationPosition);
+        InputManager.Instance.ShowLineCreation(transform.position, destinationPosition);
     }
     
     public void OnMouseUp()
@@ -98,16 +104,12 @@ public class DragPoint : MonoBehaviour
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Debug.Log("End drag at " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
         
-        RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector2.zero);
-        if (hit.collider != null)
+        DragPoint overlappingDragPoint = OverlappingDragPoint(worldPoint);
+        if (OverlappingDragPoint(worldPoint) != null)
         {
-            DragPoint dragPoint = hit.collider.GetComponent<DragPoint>();
-            if (dragPoint != null)
-            {
-                LineManager.Instance.CreateLineBetweenDragPoints(this, dragPoint);
-                
-                dragPoint.deselectFeedback.PlayFeedbacks();
-            }
+            LineManager.Instance.CreateLineBetweenDragPoints(this, overlappingDragPoint);
+
+            overlappingDragPoint.deselectFeedback.PlayFeedbacks();
         }
         else //missed, cancel line
         {
@@ -115,8 +117,21 @@ public class DragPoint : MonoBehaviour
             {
                 LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
             }
-        
-           
         }
+    }
+
+    private DragPoint OverlappingDragPoint(Vector3 position)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero);
+        if (hit.collider != null)
+        {
+            DragPoint dragPoint = hit.collider.GetComponent<DragPoint>();
+            if (dragPoint != null)
+            {
+                return dragPoint;
+            }
+        }
+
+        return null;
     }
 }

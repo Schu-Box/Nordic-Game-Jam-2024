@@ -65,6 +65,11 @@ public class LineManager : MonoBehaviour
 
    public void DestroyLine(Line line)
    {
+      if (line.isStartingGate)
+      {
+         GameController.Instance.StartGame();
+      }
+      
       lineList.Remove(line);
       
       Destroy(line.gameObject);
