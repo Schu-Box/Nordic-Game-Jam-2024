@@ -88,11 +88,6 @@ public class DragPoint : MonoBehaviour
     
     public void OnMouseUp()
     {
-        if (LineManager.Instance.lastDragPoint != null)
-        {
-            LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
-        }
-        
         LineManager.Instance.IsDraggingPoint = false;
         LineManager.Instance.lastDragPoint = null;
         InputManager.Instance.lineCreationArrow.Show(false);
@@ -113,6 +108,15 @@ public class DragPoint : MonoBehaviour
                 
                 dragPoint.deselectFeedback.PlayFeedbacks();
             }
+        }
+        else //missed, cancel line
+        {
+            if (LineManager.Instance.lastDragPoint != null)
+            {
+                LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
+            }
+        
+           
         }
     }
 }

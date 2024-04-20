@@ -22,16 +22,16 @@ public class InputManager : MonoBehaviour
     
     private void LateUpdate()
     {
-        if (Input.GetMouseButtonUp(0) && LineManager.Instance.IsDraggingPoint) //Cancel drag
-        {
-            Debug.Log("Cancelling drag");
-            
-            LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
-            
-            LineManager.Instance.IsDraggingPoint = false;
-            LineManager.Instance.lastDragPoint = null;
-            lineCreationArrow.Show(false);
-        }
+        // if (Input.GetMouseButtonUp(0) && LineManager.Instance.IsDraggingPoint) //Cancel drag
+        // {
+        //     Debug.Log("Cancelling drag");
+        //     
+        //     LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
+        //     
+        //     LineManager.Instance.IsDraggingPoint = false;
+        //     LineManager.Instance.lastDragPoint = null;
+        //     lineCreationArrow.Show(false);
+        // }
         
         if (GameController.Instance.gameOver)
             return;
