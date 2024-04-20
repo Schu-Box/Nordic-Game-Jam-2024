@@ -105,4 +105,9 @@ public class LaserSpawner : MonoBehaviour
             mostRecentHitObject.layer = defaultLayer;
         }
     }
+
+    public void TurnOff()
+    {
+        gameObject.SetActive(false);
+    }
 }

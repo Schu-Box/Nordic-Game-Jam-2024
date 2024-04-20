@@ -7,6 +7,8 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance;
 
+    public LaserSpawner laserSpawner;
+    
     public DragPoint starterGateLeft;
     public DragPoint starterGateRight;
     
@@ -34,14 +36,14 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight);
+        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
     }
 
     public void StartGame()
     {
         gameStarted = true;
         
-        //TODO: Lock playerName
+        Leaderboard.Instance.SetName();
     }
 
     private void Update()
@@ -75,6 +77,8 @@ public class GameController : MonoBehaviour
         GameOverUI.SetActive(true);
         gameOver = true;
 
-        Leaderboard.Instance.FinalizeScore("placeholder");
+        Leaderboard.Instance.FinalizeScore();
+
+        laserSpawner.TurnOff();
     }
 }

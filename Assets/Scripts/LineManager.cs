@@ -46,7 +46,7 @@ public class LineManager : MonoBehaviour
       return true;
    }
    
-   public void CreateLineBetweenDragPoints(DragPoint origin, DragPoint destination)
+   public void CreateLineBetweenDragPoints(DragPoint origin, DragPoint destination, bool isStartingGate = false)
    {
       if(!LineCanBeCreated(origin, destination))
       {
@@ -58,7 +58,7 @@ public class LineManager : MonoBehaviour
 
       
       Line newLine = new GameObject("Line").AddComponent<Line>();
-      newLine.Generate(origin, destination);
+      newLine.Generate(origin, destination, isStartingGate);
 
       lineList.Add(newLine);
    }

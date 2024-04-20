@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public struct HighScoreData
@@ -18,6 +19,10 @@ public class Leaderboard : MonoBehaviour
     public Transform leaderboardEntryParent;
     public LeaderboardEntry leaderboardEntryPrefab;
     
+    [Header("Name Entry")]
+    public TMP_InputField nameInputField;
+    
+    
     private string highScoreNamePrefix = "highScore_PlayerName";
     
     private string highScorePointsPrefix = "highScore_PlayerScore";
@@ -25,12 +30,26 @@ public class Leaderboard : MonoBehaviour
     private string highScoreTimePrefix = "highScore_PlayerTime";
     
     private string highScoreRankPrefix = "highScore_PlayerRank";
+    
+    private string savedName = "Test";
 
     private void Awake()
     {
         Instance = this;
 
         ShowLeaderboard(LoadTopXScores(10));
+
+        nameInputField.interactable = true;
+        savedName = PlayerPrefs.GetString("savedName");
+        nameInputField.text = savedName;
+    }
+
+    public void SetName()
+    {
+        PlayerPrefs.SetString("savedName", nameInputField.text);
+        savedName = PlayerPrefs.GetString("savedName");
+
+        nameInputField.interactable = false;
     }
     
     [ContextMenu("Clear Scores")]
@@ -39,13 +58,13 @@ public class Leaderboard : MonoBehaviour
         PlayerPrefs.DeleteAll();
     }
     
-    public void FinalizeScore(string playerName)
+    public void FinalizeScore()
     {
         List<HighScoreData> topScores = LoadTopXScores(numScoresOnLeaderboard);
 
         HighScoreData currentPlayer = new HighScoreData
         {
-            playerName = playerName,
+            playerName = savedName,
             playerScore = GameController.Instance.score,
             rank = 999,
         };
