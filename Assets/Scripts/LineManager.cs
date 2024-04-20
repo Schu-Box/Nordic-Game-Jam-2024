@@ -29,6 +29,11 @@ public class LineManager : MonoBehaviour
 
    public bool LineCanBeCreated(DragPoint origin, DragPoint destination)
    {
+      if(origin == destination)
+      {
+         return false;
+      }
+      
       foreach (Line line in lineList)
       {
          if(line.origin == origin && line.destination == destination || line.origin == destination && line.destination == origin)
@@ -52,23 +57,14 @@ public class LineManager : MonoBehaviour
 
       
       Line newLine = new GameObject("Line").AddComponent<Line>();
+      newLine.Generate(origin, destination);
       newLine.origin = origin;
       newLine.destination = destination;
       
-      LineRenderer lineRenderer = newLine.gameObject.AddComponent<LineRenderer>();
-      lineRenderer.positionCount = 2;
-      lineRenderer.SetPosition(0, origin.transform.position);
-      lineRenderer.SetPosition(1, destination.transform.position);
-      lineRenderer.startWidth = lineWidth;
-      lineRenderer.endWidth = lineWidth;
-      lineRenderer.material = lineMaterial;
-      
       //add collider to lineRenderer
-      EdgeCollider2D edgeCollider = lineRenderer.gameObject.AddComponent<EdgeCollider2D>();
+      EdgeCollider2D edgeCollider = newLine.gameObject.AddComponent<EdgeCollider2D>();
       edgeCollider.points = new Vector2[] { origin.transform.position, destination.transform.position };
       edgeCollider.edgeRadius = edgeColliderRadius;
-
-      lineRenderer.gameObject.layer = LayerMask.NameToLayer("Mirrors");
 
       lineList.Add(newLine);
    }
