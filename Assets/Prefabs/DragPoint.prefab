@@ -125,6 +125,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Anchor_v2
       objectReference: {fileID: 0}
+    - target: {fileID: 2044290590280554384, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.016
+      objectReference: {fileID: 0}
+    - target: {fileID: 2044290590280554384, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.016
+      objectReference: {fileID: 0}
     - target: {fileID: 8793144285420259908, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
