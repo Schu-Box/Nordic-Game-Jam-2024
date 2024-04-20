@@ -13,9 +13,9 @@ TagManager:
   - UI
   - DragPoints
   - Lasers
-  - MostRecentHit
-  - 
-  - 
+  - Mirrors
+  - MostRecentMirror
+  - Targets
   - 
   - 
   - 

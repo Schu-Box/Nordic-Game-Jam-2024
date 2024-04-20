@@ -55,17 +55,31 @@ public class InputManager : MonoBehaviour
 
     private void AttemptCancellation()
     {
+        Debug.Log("Attempting cancel");
+        
         Vector3 start = startDragCancellationPosition;
         Vector3 end = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
-        //TODO: repeat for all raycast hits
-        RaycastHit2D hit = Physics2D.Raycast(end, Vector2.zero, 9999f, cancellationLayerMask);
-        if (hit.collider != null)
+        bool attemptingRaycast = true;
+        while (attemptingRaycast)
         {
-            Line line = hit.collider.GetComponent<Line>(); 
-            if (line != null)
+            RaycastHit2D hit = Physics2D.Raycast(start, end - start, Vector3.Distance(start, end), cancellationLayerMask);
+            if (hit.collider != null)
             {
-                LineManager.Instance.DestroyLine(line);
+                // Debug.Log("Hit " + hit.collider.name);
+                Line line = hit.collider.GetComponent<Line>();
+                if (line != null)
+                {
+                    LineManager.Instance.DestroyLine(hit.collider.GetComponent<Line>());
+                }
+                else
+                {
+                    Debug.LogWarning(hit.collider.name + " should not be on this layer! Was hit by cancellation arrow.");
+                }
+            }
+            else
+            {
+                attemptingRaycast = false; //No more hits, stop attempting to destroy lines
             }
         }
     }

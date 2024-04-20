@@ -12,6 +12,8 @@ public class LineManager : MonoBehaviour
    public Material lineMaterial;
 
    public bool IsDraggingPoint = false;
+
+   private List<Line> lineList = new List<Line>();
    
    private void Awake()
    {
@@ -24,12 +26,36 @@ public class LineManager : MonoBehaviour
          Destroy(gameObject);
       }
    }
+
+   public bool LineCanBeCreated(DragPoint origin, DragPoint destination)
+   {
+      foreach (Line line in lineList)
+      {
+         if(line.origin == origin && line.destination == destination || line.origin == destination && line.destination == origin)
+         {
+            return false;
+         }
+      }
+
+      return true;
+   }
    
    public void CreateLineBetweenDragPoints(DragPoint origin, DragPoint destination)
    {
+      if(!LineCanBeCreated(origin, destination))
+      {
+         Debug.Log("Can't create line between " + origin.name + " and " + destination.name + " because it already exists.");
+         return;
+      }
+      
       Debug.Log("Creating line between " + origin.name + " and " + destination.name);
 
-      LineRenderer lineRenderer = new GameObject("Line").AddComponent<LineRenderer>();
+      
+      Line newLine = new GameObject("Line").AddComponent<Line>();
+      newLine.origin = origin;
+      newLine.destination = destination;
+      
+      LineRenderer lineRenderer = newLine.gameObject.AddComponent<LineRenderer>();
       lineRenderer.positionCount = 2;
       lineRenderer.SetPosition(0, origin.transform.position);
       lineRenderer.SetPosition(1, destination.transform.position);
@@ -42,11 +68,15 @@ public class LineManager : MonoBehaviour
       edgeCollider.points = new Vector2[] { origin.transform.position, destination.transform.position };
       edgeCollider.edgeRadius = edgeColliderRadius;
 
-      lineRenderer.gameObject.AddComponent<Line>();
+      lineRenderer.gameObject.layer = LayerMask.NameToLayer("Mirrors");
+
+      lineList.Add(newLine);
    }
-   
+
    public void DestroyLine(Line line)
    {
+      lineList.Remove(line);
+      
       Destroy(line.gameObject);
    }
 }

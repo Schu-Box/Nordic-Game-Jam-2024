@@ -31,7 +31,7 @@ public class LaserSpawner : MonoBehaviour
 
     public void ShootLaser()
     {
-        Debug.Log("Shooting laser");
+        // Debug.Log("Shooting laser");
 
         ResetMostRecentlyHitObject();
 
@@ -60,7 +60,7 @@ public class LaserSpawner : MonoBehaviour
 
                 ResetMostRecentlyHitObject();
                 
-                int mostRecentHitLayer = LayerMask.NameToLayer("MostRecentHit");
+                int mostRecentHitLayer = LayerMask.NameToLayer("MostRecentMirror");
                 mostRecentHitObject = hit.collider.gameObject;
                 mostRecentHitObject.layer = mostRecentHitLayer;
                 
@@ -69,7 +69,7 @@ public class LaserSpawner : MonoBehaviour
         
                 remainingLength -= Vector3.Distance(raycastOrigin, hit.point);
         
-                Debug.Log("Last direction : " + raycastDirection +  " to New direction : " + Vector2.Reflect(raycastDirection, hit.normal) + " with hit normal of " + hit.normal);
+                // Debug.Log("Last direction : " + raycastDirection +  " to New direction : " + Vector2.Reflect(raycastDirection, hit.normal) + " with hit normal of " + hit.normal);
 
                 // raycastOrigin = hit.collider.ClosestPoint(raycastDirection);
                 raycastOrigin = hit.point;
@@ -90,7 +90,7 @@ public class LaserSpawner : MonoBehaviour
     {
         if (mostRecentHitObject != null)
         {
-            int defaultLayer = LayerMask.NameToLayer("Default");
+            int defaultLayer = LayerMask.NameToLayer("Mirrors");
             mostRecentHitObject.layer = defaultLayer;
         }
     }
