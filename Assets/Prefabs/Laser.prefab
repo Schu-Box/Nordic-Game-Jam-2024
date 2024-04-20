@@ -124,7 +124,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4566700737367178134}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -137,7 +137,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 09aa345cb3d63e34a92b1efc5cdccc8c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,10 +157,12 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
+  - {x: 1.0823079, y: 16.831663, z: 3.1189141}
+  - {x: 3.670053, y: 17.970179, z: 3.1189141}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -169,7 +171,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.10000229
+        value: 0.4
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -206,7 +208,7 @@ LineRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
@@ -260,7 +262,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5328734656841405496}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -402,7 +404,7 @@ GameObject:
   - component: {fileID: 5485668729260163985}
   - component: {fileID: 8634831227239546829}
   m_Layer: 7
-  m_Name: LaserLine (1)
+  m_Name: Core
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -444,7 +446,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 09aa345cb3d63e34a92b1efc5cdccc8c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -464,7 +466,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
@@ -476,7 +478,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0.0037765503
-        value: 0.15417099
+        value: 0.04
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -559,6 +561,7 @@ Transform:
   m_Children:
   - {fileID: 6950614549333433518}
   - {fileID: 2439238936265684262}
+  - {fileID: 6282423131501048051}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5764680068446854916
@@ -596,7 +599,7 @@ GameObject:
   - component: {fileID: 7931946674770535512}
   - component: {fileID: 3502462186145407883}
   m_Layer: 7
-  m_Name: LaserLine
+  m_Name: Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -638,7 +641,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: adb25545128c4cb49b7a4d5689c58b06, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -658,7 +661,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
@@ -670,7 +673,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.10000229
+        value: 0.09
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -721,3 +724,65 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1001 &3108422422615249362
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1255355908485219130}
+    m_Modifications:
+    - target: {fileID: 6097229095415276302, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_Name
+      value: Laser
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.545
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 21.683
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+--- !u!4 &6282423131501048051 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8938786765322740001, guid: 8e6ba62fc4d51194cafceeba1956e52f, type: 3}
+  m_PrefabInstance: {fileID: 3108422422615249362}
+  m_PrefabAsset: {fileID: 0}
