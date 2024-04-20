@@ -80,7 +80,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d532c5bbad4331f45bae0eb91c3d6e63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wiggle: {fileID: 0}
+  selectFeedback: {fileID: 8940869206829630334}
+  deselectFeedback: {fileID: 2092924399010479635}
   durationRangeBeforeMovement: {x: 1, y: 2}
   durationRangeDuringMovement: {x: 1, y: 2}
   distanceRangeOfMovement: {x: 0, y: 1}
@@ -529,8 +530,30 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+--- !u!114 &2092924399010479635 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 388170052595478587, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+  m_PrefabInstance: {fileID: 1758797756729757224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7092895765552071788 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8793144285420259908, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
   m_PrefabInstance: {fileID: 1758797756729757224}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8940869206829630334 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7240899870610853206, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+  m_PrefabInstance: {fileID: 1758797756729757224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

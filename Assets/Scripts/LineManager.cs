@@ -11,6 +11,7 @@ public class LineManager : MonoBehaviour
 
    public Material lineMaterial;
 
+   public DragPoint lastDragPoint = null;
    public bool IsDraggingPoint = false;
 
    private List<Line> lineList = new List<Line>();

@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 
 public class DragPoint : MonoBehaviour
 {
-    public MMWiggle wiggle;
+    public MMF_Player selectFeedback;
+    public MMF_Player deselectFeedback;
     
     public Vector2 durationRangeBeforeMovement = new Vector2(2f, 8f);
     public Vector2 durationRangeDuringMovement = new Vector2(1f, 4f);
@@ -70,6 +71,9 @@ public class DragPoint : MonoBehaviour
         
         Debug.Log("Start drag at " + transform.position);
         LineManager.Instance.IsDraggingPoint = true;
+        LineManager.Instance.lastDragPoint = this;
+        
+        selectFeedback.PlayFeedbacks();
     }
 
     public void OnMouseDrag()
@@ -84,11 +88,17 @@ public class DragPoint : MonoBehaviour
     
     public void OnMouseUp()
     {
-        if (GameController.Instance.gameOver)
-            return;
+        if (LineManager.Instance.lastDragPoint != null)
+        {
+            LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
+        }
         
         LineManager.Instance.IsDraggingPoint = false;
+        LineManager.Instance.lastDragPoint = null;
         InputManager.Instance.lineCreationArrow.Show(false);
+        
+        if (GameController.Instance.gameOver)
+            return;
         
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Debug.Log("End drag at " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -100,6 +110,8 @@ public class DragPoint : MonoBehaviour
             if (dragPoint != null)
             {
                 LineManager.Instance.CreateLineBetweenDragPoints(this, dragPoint);
+                
+                dragPoint.deselectFeedback.PlayFeedbacks();
             }
         }
     }
