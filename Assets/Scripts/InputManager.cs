@@ -22,6 +22,12 @@ public class InputManager : MonoBehaviour
     
     private void LateUpdate()
     {
+        if (Input.GetMouseButtonUp(0) && LineManager.Instance.IsDraggingPoint)
+        {
+            LineManager.Instance.IsDraggingPoint = false;
+            lineCreationArrow.Show(false);
+        }
+        
         if (GameController.Instance.gameOver)
             return;
         
@@ -31,12 +37,6 @@ public class InputManager : MonoBehaviour
 
             IsDraggingCancellation = true;
             startDragCancellationPosition = worldPoint;
-        }
-
-        if (Input.GetMouseButtonUp(0) && LineManager.Instance.IsDraggingPoint)
-        {
-            LineManager.Instance.IsDraggingPoint = false;
-            lineCreationArrow.Show(false);
         }
     }
 

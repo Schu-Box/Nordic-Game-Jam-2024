@@ -2067,3 +2067,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54530cd6bc311624fb7491a0b8f744b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collider: {fileID: 2897061060293483402}
+  destroyFeedback: {fileID: 1243042651730099735}
