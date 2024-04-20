@@ -10,6 +10,8 @@ public class LineManager : MonoBehaviour
    public float edgeColliderRadius = 0.1f;
 
    public Material lineMaterial;
+
+   public bool IsDraggingPoint = false;
    
    private void Awake()
    {
@@ -39,5 +41,12 @@ public class LineManager : MonoBehaviour
       EdgeCollider2D edgeCollider = lineRenderer.gameObject.AddComponent<EdgeCollider2D>();
       edgeCollider.points = new Vector2[] { origin.transform.position, destination.transform.position };
       edgeCollider.edgeRadius = edgeColliderRadius;
+
+      lineRenderer.gameObject.AddComponent<Line>();
+   }
+   
+   public void DestroyLine(Line line)
+   {
+      Destroy(line.gameObject);
    }
 }

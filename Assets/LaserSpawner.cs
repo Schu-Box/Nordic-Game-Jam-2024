@@ -51,6 +51,13 @@ public class LaserSpawner : MonoBehaviour
             {
                 // Debug.Log("HIT " + hit.collider.name);
 
+                Target target = hit.collider.gameObject.GetComponent<Target>();
+                if (target != null)
+                {
+                    target.Hit();
+                    break;
+                }
+
                 ResetMostRecentlyHitObject();
                 
                 int mostRecentHitLayer = LayerMask.NameToLayer("MostRecentHit");
