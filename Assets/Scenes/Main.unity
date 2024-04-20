@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineWidth: 0.1
   edgeColliderRadius: 0
+  lineMaterial: {fileID: 2100000, guid: a2836ee0f25bea54c8e1357973eb7792, type: 2}
 --- !u!4 &165359068
 Transform:
   m_ObjectHideFlags: 0

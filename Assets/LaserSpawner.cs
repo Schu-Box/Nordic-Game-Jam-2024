@@ -16,6 +16,8 @@ public class LaserSpawner : MonoBehaviour
     // private Ray2D ray;
 
     private Vector2 laserDirection;
+    
+    private GameObject mostRecentHitObject = null;
 
     private void Start()
     {
@@ -30,6 +32,8 @@ public class LaserSpawner : MonoBehaviour
     public void ShootLaser()
     {
         Debug.Log("Shooting laser");
+
+        ResetMostRecentlyHitObject();
 
         Vector3 raycastOrigin = laserFirePoint.position;
         Vector3 raycastDirection = laserDirection;
@@ -46,6 +50,12 @@ public class LaserSpawner : MonoBehaviour
             if (hit)
             {
                 // Debug.Log("HIT " + hit.collider.name);
+
+                ResetMostRecentlyHitObject();
+                
+                int mostRecentHitLayer = LayerMask.NameToLayer("MostRecentHit");
+                mostRecentHitObject = hit.collider.gameObject;
+                mostRecentHitObject.layer = mostRecentHitLayer;
                 
                 laserLineRenderer.positionCount += 1;
                 laserLineRenderer.SetPosition(laserLineRenderer.positionCount - 1, hit.point);
@@ -66,6 +76,15 @@ public class LaserSpawner : MonoBehaviour
                 laserLineRenderer.SetPosition(laserLineRenderer.positionCount - 1, raycastOrigin + (raycastDirection * remainingLength));
                 break;
             }
+        }
+    }
+
+    private void ResetMostRecentlyHitObject()
+    {
+        if (mostRecentHitObject != null)
+        {
+            int defaultLayer = LayerMask.NameToLayer("Default");
+            mostRecentHitObject.layer = defaultLayer;
         }
     }
     
