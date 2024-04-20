@@ -12,52 +12,97 @@ public class LaserSpawner : MonoBehaviour
     public Transform laserFirePoint;
     public LineRenderer laserLineRenderer;
 
-    private RaycastHit2D hit;
-    private Ray2D ray;
-    // private Vector3 direction;
+    // private RaycastHit2D hit;
+    // private Ray2D ray;
 
-    public void Update()
+    private Vector2 laserDirection;
+
+    private void Start()
     {
-        // ShootLaser();
+        laserDirection = transform.up;
     }
 
-    // public void ShootLaser()
+    public void FixedUpdate()
+    {
+        ShootLaser();
+    }
+
+    public void ShootLaser()
+    {
+        Debug.Log("Shooting laser");
+
+        Vector3 raycastOrigin = laserFirePoint.position;
+        Vector3 raycastDirection = laserDirection;
+        // ray = new Ray2D(transform.position, laserDirection);
+        
+        laserLineRenderer.positionCount = 1;
+        laserLineRenderer.SetPosition(0, laserFirePoint.position);
+        
+        float remainingLength = maxLaserLength;
+        
+        for (int i = 0; i < maxNumReflections; i++)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, remainingLength, layerMask);
+            if (hit)
+            {
+                // Debug.Log("HIT " + hit.collider.name);
+                
+                laserLineRenderer.positionCount += 1;
+                laserLineRenderer.SetPosition(laserLineRenderer.positionCount - 1, hit.point);
+        
+                remainingLength -= Vector3.Distance(raycastOrigin, hit.point);
+        
+                Debug.Log("Last direction : " + raycastDirection +  " to New direction : " + Vector2.Reflect(raycastDirection, hit.normal) + " with hit normal of " + hit.normal);
+
+                // raycastOrigin = hit.collider.ClosestPoint(raycastDirection);
+                raycastOrigin = hit.point;
+                raycastDirection = Vector2.Reflect(raycastDirection, hit.normal);
+            }
+            else
+            {
+                // Debug.Log("No hit");
+                
+                laserLineRenderer.positionCount += 1;
+                laserLineRenderer.SetPosition(laserLineRenderer.positionCount - 1, raycastOrigin + (raycastDirection * remainingLength));
+                break;
+            }
+        }
+    }
+    
+    // public void ShootLaser3D()
     // {
-    //     ray = new Ray(transform.position, transform.forward);
+    //     Debug.Log("Shooting laser");
     //
+    //     ray = new Ray(transform.position, laserDirection);
+    //     
     //     laserLineRenderer.positionCount = 1;
     //     laserLineRenderer.SetPosition(0, laserFirePoint.position);
-    //
+    //     
     //     float remainingLength = maxLaserLength;
-    //
+    //     
     //     for (int i = 0; i < maxNumReflections; i++)
     //     {
-    //         hit = Physics2D.Raycast(ray.origin, ray.direction, remainingLength, layerMask);
-    //         if (hit)
+    //         if(Physics.Raycast(ray.origin, ray.direction, out hit, remainingLength, layerMask))
     //         {
+    //             // Debug.Log("HIT " + hit.collider.name);
     //             
+    //             laserLineRenderer.positionCount += 1;
+    //             laserLineRenderer.SetPosition(laserLineRenderer.positionCount - 1, hit.point);
+    //     
+    //             remainingLength -= Vector3.Distance(ray.origin, hit.point);
+    //     
+    //             Debug.Log("Last direction : " + ray.direction +  " to New direction : " + Vector3.Reflect(ray.direction, hit.normal) + " with hit normal of " + hit.normal);
+    //             
+    //             ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
     //         }
     //         else
     //         {
+    //             // Debug.Log("No hit");
+    //             
     //             laserLineRenderer.positionCount += 1;
-    //             laserLineRenderer.SetPosition(laserLineRenderer.positionCount - 1, ray.origin + (transform.forward * remainingLength));
+    //             laserLineRenderer.SetPosition(laserLineRenderer.positionCount - 1, ray.origin + (ray.direction * remainingLength));
+    //             break;
     //         }
     //     }
-    //     
-    //     if (Physics2D.Raycast(transform.position, transform.up))
-    //     {
-    //         RaycastHit2D raycastHit2D = Physics2D.Raycast(laserFirePoint.position, transform.up);
-    //         Draw2DRay(laserFirePoint.position, raycastHit2D.point);
-    //     }
-    //     else
-    //     {
-    //         Draw2DRay(transform.position, laserFirePoint.position + transform.up * maxLaserDistance);
-    //     }
     // }
-
-    public void Draw2DRay(Vector3 startPosition, Vector3 endPosition)
-    {
-        laserLineRenderer.SetPosition(0, startPosition);
-        laserLineRenderer.SetPosition(1, endPosition);        
-    }
 }
