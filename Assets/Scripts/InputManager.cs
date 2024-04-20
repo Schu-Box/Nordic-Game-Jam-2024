@@ -22,6 +22,9 @@ public class InputManager : MonoBehaviour
     
     private void LateUpdate()
     {
+        if (GameController.Instance.gameOver)
+            return;
+        
         if (Input.GetMouseButtonDown(0) && !LineManager.Instance.IsDraggingPoint)
         {
             Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -57,13 +60,13 @@ public class InputManager : MonoBehaviour
     {
         Debug.Log("Attempting cancel");
         
-        Vector3 start = startDragCancellationPosition;
-        Vector3 end = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 start = startDragCancellationPosition;
+        Vector2 end = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
         bool attemptingRaycast = true;
         while (attemptingRaycast)
         {
-            RaycastHit2D hit = Physics2D.Raycast(start, end - start, Vector3.Distance(start, end), cancellationLayerMask);
+            RaycastHit2D hit = Physics2D.Raycast(start, end - start, Vector2.Distance(start, end), cancellationLayerMask);
             if (hit.collider != null)
             {
                 // Debug.Log("Hit " + hit.collider.name);

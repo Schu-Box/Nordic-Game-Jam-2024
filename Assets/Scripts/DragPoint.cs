@@ -7,12 +7,18 @@ public class DragPoint : MonoBehaviour
 {
     public void OnMouseDown()
     {
+        if (GameController.Instance.gameOver)
+            return;
+        
         Debug.Log("Start drag at " + transform.position);
         LineManager.Instance.IsDraggingPoint = true;
     }
 
     public void OnMouseDrag()
     {
+        if (GameController.Instance.gameOver)
+            return;
+        
         // Debug.Log("Dragging");
 
         InputManager.Instance.ShowLineCreation(transform.position, Camera.main.ScreenToWorldPoint(Input.mousePosition));
@@ -20,6 +26,9 @@ public class DragPoint : MonoBehaviour
     
     public void OnMouseUp()
     {
+        if (GameController.Instance.gameOver)
+            return;
+        
         LineManager.Instance.IsDraggingPoint = false;
         InputManager.Instance.lineCreationArrow.Show(false);
         
