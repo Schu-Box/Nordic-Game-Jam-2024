@@ -5,6 +5,23 @@ using UnityEngine.EventSystems;
 
 public class DragPoint : MonoBehaviour
 {
+    private void Update()
+    {
+        //pick a random direction and a random distance
+        Vector2 randomDirection = Random.insideUnitCircle;
+        float randomDistance = Random.Range(0.1f, 1f);
+        
+        //move the point in that direction
+        transform.position += new Vector3(randomDirection.x, randomDirection.y, 0f) * randomDistance * Time.deltaTime;
+        
+    }
+
+    private void Move(Vector3 newPosition, float duration)
+    {
+        //move the point to the new position over the duration
+        
+    }
+    
     public void OnMouseDown()
     {
         if (GameController.Instance.gameOver)
