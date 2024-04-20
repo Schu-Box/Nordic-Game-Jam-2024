@@ -1551,6 +1551,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].time
+      value: 0.0037765503
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].time
+      value: 0.48866615
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].time
+      value: 0.9551464
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[0].value
+      value: 0.17083359
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].value
+      value: 0.59166896
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[2].value
+      value: 0.15416247
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inSlope
+      value: -0.0000014496136
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].outSlope
+      value: -0.0000014496136
+      objectReference: {fileID: 0}
+    - target: {fileID: 1521406249788075997, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
+      propertyPath: m_Parameters.widthCurve.m_Curve.Array.data[1].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
     - target: {fileID: 6595421541133087127, guid: 5d13e3257d392254aafb8ec8ff069f24, type: 3}
       propertyPath: m_Name
       value: CancellationArrow

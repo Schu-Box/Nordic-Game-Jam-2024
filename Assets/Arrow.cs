@@ -13,7 +13,7 @@ public class Arrow : MonoBehaviour
       lineRenderer.SetPosition(1, destination);
    }
    
-   public void ShowArrow(bool show)
+   public void Show(bool show)
    {
       lineRenderer.enabled = show;
    }

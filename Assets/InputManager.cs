@@ -29,6 +29,12 @@ public class InputManager : MonoBehaviour
             IsDraggingCancellation = true;
             startDragCancellationPosition = worldPoint;
         }
+
+        if (Input.GetMouseButtonUp(0) && LineManager.Instance.IsDraggingPoint)
+        {
+            LineManager.Instance.IsDraggingPoint = false;
+            lineCreationArrow.Show(false);
+        }
     }
 
     private void Update()
@@ -42,7 +48,7 @@ public class InputManager : MonoBehaviour
                 AttemptCancellation();
                 
                 IsDraggingCancellation = false;
-                lineCancellationArrow.ShowArrow(false);
+                lineCancellationArrow.Show(false);
             }
         }
     }
@@ -67,12 +73,12 @@ public class InputManager : MonoBehaviour
     public void ShowLineCreation(Vector3 start, Vector3 end)
     {
         lineCreationArrow.SetArrow(start, end);
-        lineCreationArrow.ShowArrow(true);
+        lineCreationArrow.Show(true);
     }
     
     public void ShowLineCancellation(Vector3 start, Vector3 end)
     {
         lineCancellationArrow.SetArrow(start, end);
-        lineCancellationArrow.ShowArrow(true);
+        lineCancellationArrow.Show(true);
     }
 }

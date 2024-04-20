@@ -21,6 +21,7 @@ public class DragPoint : MonoBehaviour
     public void OnMouseUp()
     {
         LineManager.Instance.IsDraggingPoint = false;
+        InputManager.Instance.lineCreationArrow.Show(false);
         
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Debug.Log("End drag at " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
