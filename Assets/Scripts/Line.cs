@@ -5,6 +5,7 @@ using UnityEngine;
 public class Line : MonoBehaviour
 {
     private LineRenderer lineRenderer;
+    private EdgeCollider2D edgeCollider;
     
     public DragPoint origin;
     public DragPoint destination;
@@ -23,6 +24,10 @@ public class Line : MonoBehaviour
         lineRenderer.material = LineManager.Instance.lineMaterial;
         
         lineRenderer.gameObject.layer = LayerMask.NameToLayer("Mirrors");
+        
+        edgeCollider = gameObject.AddComponent<EdgeCollider2D>();
+        edgeCollider.points = new Vector2[] { origin.transform.position, destination.transform.position };
+        edgeCollider.edgeRadius = LineManager.Instance.edgeColliderRadius;
 
     }
 
@@ -30,5 +35,7 @@ public class Line : MonoBehaviour
     {
         lineRenderer.SetPosition(0, origin.transform.position);
         lineRenderer.SetPosition(1, destination.transform.position);
+        
+        edgeCollider.points = new Vector2[] { origin.transform.position, destination.transform.position };
     }
 }

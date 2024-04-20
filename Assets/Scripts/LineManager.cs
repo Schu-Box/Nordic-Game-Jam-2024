@@ -58,13 +58,6 @@ public class LineManager : MonoBehaviour
       
       Line newLine = new GameObject("Line").AddComponent<Line>();
       newLine.Generate(origin, destination);
-      newLine.origin = origin;
-      newLine.destination = destination;
-      
-      //add collider to lineRenderer
-      EdgeCollider2D edgeCollider = newLine.gameObject.AddComponent<EdgeCollider2D>();
-      edgeCollider.points = new Vector2[] { origin.transform.position, destination.transform.position };
-      edgeCollider.edgeRadius = edgeColliderRadius;
 
       lineList.Add(newLine);
    }
