@@ -52,6 +52,10 @@ public class GameController : MonoBehaviour
 
     public void ShowGame()
     {
+        Debug.Log("hiding all");
+
+        screenFillSpawner.Spawn();
+        
         screenFillSpawner.HideAllScreenFillers();
     }
 

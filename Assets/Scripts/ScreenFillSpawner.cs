@@ -18,6 +18,11 @@ public class ScreenFillSpawner : MonoBehaviour
    
    private void Start()
    {
+      
+   }
+
+   public void Spawn()
+   {
       Vector2 centerPoint = Vector2.zero;
 
       for (int r = 0; r < numRings; r++)
