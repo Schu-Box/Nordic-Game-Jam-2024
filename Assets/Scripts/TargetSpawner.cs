@@ -11,6 +11,8 @@ public class TargetSpawner : MonoBehaviour
     public int numTargets = 100;
     public float spawnRadius = 4.5f;
 
+    public Vector2 scaleMinMaxOfTargets = new Vector2(1f, 1f);
+
     public bool spawnNewTargets = false;
 
     private void Update()
@@ -39,10 +41,12 @@ public class TargetSpawner : MonoBehaviour
             var spawnDir = new Vector2(horizontal, vertical);
             var spawnPos = centerPoint + spawnDir * spawnRadius;
 
-            var target = Instantiate(targetPrefab, spawnPos, Quaternion.identity, targetParent);
+            Target target = Instantiate(targetPrefab, spawnPos, Quaternion.identity, targetParent);
             var dir = centerPoint - spawnPos;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             target.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            
+            target.transform.localScale = Vector3.one * Random.Range(scaleMinMaxOfTargets.x, scaleMinMaxOfTargets.y);
         }
     }
 }

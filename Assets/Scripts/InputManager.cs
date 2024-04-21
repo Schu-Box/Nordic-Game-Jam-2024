@@ -63,7 +63,7 @@ public class InputManager : MonoBehaviour
 
     private void AttemptCancellation()
     {
-        Debug.Log("Attempting cancel");
+        // Debug.Log("Attempting cancel");
         
         Vector2 start = startDragCancellationPosition;
         Vector2 end = Camera.main.ScreenToWorldPoint(Input.mousePosition);
