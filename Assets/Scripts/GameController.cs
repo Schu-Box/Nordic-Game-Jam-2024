@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
     public Leaderboard endLeaderboard;
 
     [Header("Errythang else")]
+    public MMF_Player feedback_breakStartingGate;
+    
     public TextMeshProUGUI playerNameText;
     
     public LaserSpawner laserSpawner;
@@ -78,7 +80,7 @@ public class GameController : MonoBehaviour
             
             currentName = savedName;
 
-            startUI.alpha = 0f;
+            startUI.gameObject.SetActive(false);
             
             ShowGame();
         }
@@ -136,16 +138,25 @@ public class GameController : MonoBehaviour
 
     public void HideGame()
     {
+        StartCoroutine(PlaySoundAfterDelay(1.5f));
+        
+        screenFillSpawner.ShowAllScreenFillers();
+    }
+    
+    private IEnumerator PlaySoundAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        
         fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/end_transition");
         fmodStudioEvent.start();
         fmodStudioEvent.release();
-        
-        screenFillSpawner.ShowAllScreenFillers();
     }
 
     public void StartGame()
     {
         gameStarted = true;
+        
+        feedback_breakStartingGate.PlayFeedbacks();
     }
 
     private void Update()
