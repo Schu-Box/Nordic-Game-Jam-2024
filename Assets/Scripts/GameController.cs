@@ -32,6 +32,8 @@ public class GameController : MonoBehaviour
     public float timeBetweenBeeps = 1f;
     private float timeUntilBeepTimer = 0f;
     
+    public ScreenFillerTriggerer screenFillerTriggerer;
+    
     private void Awake()
     {
         Instance = this;
@@ -44,6 +46,16 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
+    }
+
+    public void ShowGame()
+    {
+        screenFillerTriggerer.StartGrow();
+    }
+
+    public void HideGame()
+    {
+        screenFillerTriggerer.StartShrink();
     }
 
     public void StartGame()

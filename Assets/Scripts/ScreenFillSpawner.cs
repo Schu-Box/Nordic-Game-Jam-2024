@@ -37,4 +37,28 @@ public class ScreenFillSpawner : MonoBehaviour
          }
       }
    }
+
+   public void OnTriggerEnter2D(Collider2D collider2D)
+   {
+      Debug.Log("ETNERED");
+      
+      if (collider2D.gameObject.CompareTag("ScreenFillerTriggerer"))
+      {
+         Debug.Log("ScreenFiller entered");
+         ScreenFiller screenFiller = collider2D.gameObject.GetComponent<ScreenFiller>();
+         screenFiller.hideFeedback.PlayFeedbacks();
+      }
+   }
+   
+   public void OnTriggerExit2D(Collider2D collider2D)
+   {
+      Debug.Log("EXITED");
+      
+      if (collider2D.gameObject.CompareTag("ScreenFillerTriggerer"))
+      {
+         Debug.Log("ScreenFiller exited");
+         ScreenFiller screenFiller = collider2D.gameObject.GetComponent<ScreenFiller>();
+         screenFiller.showFeedback.PlayFeedbacks();
+      }
+   }
 }
