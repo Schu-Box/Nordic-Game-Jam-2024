@@ -13,6 +13,8 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private float timerBeforeMovement;
     private Coroutine movementCoroutine;
+    
+    private FMOD.Studio.EventInstance fmodStudioEvent;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -22,8 +24,19 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         Debug.Log("Hovering");
         
         hoverFeedback.PlayFeedbacks();
-        
-        
+
+        if (LineManager.Instance.IsDraggingPoint)
+        {
+            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_hover_with_line");
+            fmodStudioEvent.start();
+            fmodStudioEvent.release();
+        }
+        else
+        {
+            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/hover_cursor");
+            fmodStudioEvent.start();
+            fmodStudioEvent.release();  
+        }
     }
     
     public void OnPointerExit(PointerEventData eventData)
@@ -46,6 +59,10 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         LineManager.Instance.lastDragPoint = this;
         
         selectFeedback.PlayFeedbacks();
+        
+        fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_select");
+        fmodStudioEvent.start();
+        fmodStudioEvent.release();
     }
 
     public void OnMouseDrag()
@@ -60,7 +77,7 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             destinationPosition = overlappingDragPoint.transform.position;
         }
 
-        Debug.Log(transform.position + " to " + destinationPosition);
+        // Debug.Log(transform.position + " to " + destinationPosition);
         InputManager.Instance.ShowLineCreation(transform.position, destinationPosition);
     }
     
@@ -74,7 +91,7 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             return;
         
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Debug.Log("End drag at " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        // Debug.Log("End drag at " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
         
         DragPoint overlappingDragPoint = OverlappingDragPoint(worldPoint);
         if (OverlappingDragPoint(worldPoint) != null)
@@ -82,9 +99,19 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             LineManager.Instance.CreateLineBetweenDragPoints(this, overlappingDragPoint);
 
             overlappingDragPoint.deselectFeedback.PlayFeedbacks();
+            
+            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_snap");
+            fmodStudioEvent.start();
+            fmodStudioEvent.release();
         }
         else //missed, cancel line
         {
+            Debug.Log("CANCEL!");
+
+            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_drop");
+            fmodStudioEvent.start();
+            fmodStudioEvent.release();
+            
             if (LineManager.Instance.lastDragPoint != null)
             {
                 LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
