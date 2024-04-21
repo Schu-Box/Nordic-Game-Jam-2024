@@ -8,6 +8,11 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance;
 
+    [Header("Start UI")]
+    public CanvasGroup startUI;
+    public MMF_Player feedback_fadeStartUI;
+
+    [Header("Errythang else")]
     public LaserSpawner laserSpawner;
     
     public DragPoint starterGateLeft;
@@ -36,6 +41,9 @@ public class GameController : MonoBehaviour
     
     private FMOD.Studio.EventInstance fmodStudioEvent;
     
+    [Header("Music")]
+    public FMODUnity.StudioEventEmitter musicEmitter;
+    
     private void Awake()
     {
         Instance = this;
@@ -50,16 +58,21 @@ public class GameController : MonoBehaviour
     {
         LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
 
-        ShowGame();
+        // ShowGame();
     }
 
     public void ShowGame()
     {
+        // startUI.SetActive(false);
+
+        startUI.interactable = false;
+        feedback_fadeStartUI.PlayFeedbacks();
+        
         Debug.Log("hiding all");
         
-        // fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/show_game");
-        // fmodStudioEvent.start();
-        // fmodStudioEvent.release();
+        fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/start_transition");
+        fmodStudioEvent.start();
+        fmodStudioEvent.release();
 
         screenFillSpawner.Spawn();
         
@@ -68,9 +81,9 @@ public class GameController : MonoBehaviour
 
     public void HideGame()
     {
-        // fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/show_game");
-        // fmodStudioEvent.start();
-        // fmodStudioEvent.release();
+        fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/end_transition");
+        fmodStudioEvent.start();
+        fmodStudioEvent.release();
         
         screenFillSpawner.ShowAllScreenFillers();
     }

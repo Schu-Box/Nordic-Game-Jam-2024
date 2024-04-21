@@ -168,7 +168,7 @@ MonoBehaviour:
     FrequencyMin: 0
     FrequencyMax: 1
     AmplitudeMin: {x: 0, y: 0, z: 0}
-    AmplitudeMax: {x: 0.1, y: 0.1, z: 0}
+    AmplitudeMax: {x: 0.05, y: 0.05, z: 0}
     RelativeAmplitude: 1
     UniformValues: 0
     ForceVectorLength: 0

@@ -111,12 +111,14 @@ MonoBehaviour:
   - {fileID: 3184278125777408178}
   - {fileID: -6763795288397867159}
   - {fileID: 1050800427072566458}
+  - {fileID: 5993270446867307674}
+  - {fileID: 6063426804972727320}
   EditorParameters: []
   MasterBanks:
   - {fileID: 4231683426076662265}
   StringsBanks:
   - {fileID: 6299593278042674518}
-  cacheTime: 638493023609195792
+  cacheTime: 638493061630376476
   cacheVersion: 131617
 --- !u!114 &1050800427072566458
 MonoBehaviour:
@@ -214,7 +216,7 @@ MonoBehaviour:
   Path: FMOD/Build/Build/Desktop/Music.bank
   Name: Music
   StudioPath: bank:/Music
-  lastModified: 638493023608964581
+  lastModified: 638493061630376476
   FileSizes: []
   Exists: 1
 --- !u!114 &4016568860779851157
@@ -259,7 +261,7 @@ MonoBehaviour:
   Path: FMOD/Build/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638493023608734993
+  lastModified: 638493061629424005
   FileSizes: []
   Exists: 1
 --- !u!114 &4354543389192097530
@@ -304,9 +306,63 @@ MonoBehaviour:
   Path: FMOD/Build/Build/Desktop/SFX.bank
   Name: SFX
   StudioPath: bank:/SFX
-  lastModified: 638493023609195792
+  lastModified: 638493061630056765
   FileSizes: []
   Exists: 1
+--- !u!114 &5993270446867307674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/end_transition
+  m_EditorClassIdentifier: 
+  Path: event:/end_transition
+  Guid:
+    Data1: -965046945
+    Data2: 1222531645
+    Data3: 1987830434
+    Data4: -902525224
+  Banks:
+  - {fileID: 5034851739045305277}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3600
+--- !u!114 &6063426804972727320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/start_transition
+  m_EditorClassIdentifier: 
+  Path: event:/start_transition
+  Guid:
+    Data1: -1881230456
+    Data2: 1160034127
+    Data3: -1659760242
+    Data4: 283828390
+  Banks:
+  - {fileID: 5034851739045305277}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 3000
 --- !u!114 &6299593278042674518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -322,10 +378,10 @@ MonoBehaviour:
   Path: FMOD/Build/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638493023608794565
+  lastModified: 638493061629800655
   FileSizes:
   - Name: 
-    Value: 1364
+    Value: 1462
   Exists: 1
 --- !u!114 &6399327798131714360
 MonoBehaviour:
