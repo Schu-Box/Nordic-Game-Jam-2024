@@ -41,6 +41,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: UI
+  - name: Backdrop
+    uniqueID: 3570622009
+    locked: 0
+  - name: Laser
+    uniqueID: 1918450023
+    locked: 0
+  - name: GameElements
+    uniqueID: 199817463
+    locked: 0
+  - name: OuterRing
+    uniqueID: 2016559633
+    locked: 0
+  - name: UI InGame
     uniqueID: 1854359723
+    locked: 0
+  - name: transistion
+    uniqueID: 4004637085
+    locked: 0
+  - name: UI StartScreen
+    uniqueID: 4174497183
     locked: 0
