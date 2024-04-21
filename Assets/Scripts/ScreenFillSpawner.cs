@@ -15,6 +15,8 @@ public class ScreenFillSpawner : MonoBehaviour
    public float fillerPerRingIncrease = 1.5f;
 
    public float durationBetweenRingReveals = 0.3f;
+
+   public float offsetMaxRange = 0.5f;
    
    private void Start()
    {
@@ -39,6 +41,9 @@ public class ScreenFillSpawner : MonoBehaviour
             var horizontal = Mathf.Cos(radians);
             var spawnDir = new Vector2(horizontal, vertical);
             var spawnPos = centerPoint + spawnDir * spawnRadius;
+            
+            //random offset to spawnPos
+            spawnPos += Random.insideUnitCircle * offsetMaxRange;
 
             ScreenFiller filler = Instantiate(screenFillerPrefab, spawnPos, Quaternion.identity, screenFillerRing.transform);
             var dir = centerPoint - spawnPos;
