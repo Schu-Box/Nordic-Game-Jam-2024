@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -12,7 +13,15 @@ public class GameController : MonoBehaviour
     public CanvasGroup startUI;
     public MMF_Player feedback_fadeStartUI;
 
+    [Header("End UI")]
+    public CanvasGroup endUI;
+    public MMF_Player feedback_fadeEndUI;
+
+    public Leaderboard endLeaderboard;
+
     [Header("Errythang else")]
+    public TextMeshProUGUI playerNameText;
+    
     public LaserSpawner laserSpawner;
     
     public DragPoint starterGateLeft;
@@ -41,6 +50,13 @@ public class GameController : MonoBehaviour
     
     private FMOD.Studio.EventInstance fmodStudioEvent;
     
+    [Header("Name Entry")]
+    public TMP_InputField nameInputField;
+    
+    private string savedName = "";
+    
+    public string currentName = "";
+    
     [Header("Music")]
     public FMODUnity.StudioEventEmitter musicEmitter;
     
@@ -49,9 +65,45 @@ public class GameController : MonoBehaviour
         Instance = this;
         
         GameOverUI.SetActive(false);
+
+        endUI.alpha = 0f;
         
         timer = timeLimit;
         timerText.text = timer.ToString("F1");
+        
+        savedName = PlayerPrefs.GetString("savedName");
+        if (savedName != "")
+        {
+            Debug.Log("Coming in from save");
+            
+            currentName = savedName;
+
+            startUI.alpha = 0f;
+            
+            ShowGame();
+        }
+        else
+        {
+            Debug.Log("was no save");
+            
+            // startUI.gameObject.SetActive(true);
+        }
+        
+        PlayerPrefs.SetString("savedName", "");
+
+        // nameInputField.interactable = true;
+        // savedName = PlayerPrefs.GetString("savedName");
+        // nameInputField.text = savedName;
+    }
+    
+    public void SetName()
+    {
+        currentName = nameInputField.text;
+        // PlayerPrefs.SetString("savedName", nameInputField.text);
+        // savedName = PlayerPrefs.GetString("savedName");
+
+        // nameInputField.interactable = false;
+        playerNameText.text = currentName;
     }
 
     private void Start()
@@ -64,8 +116,11 @@ public class GameController : MonoBehaviour
     public void ShowGame()
     {
         // startUI.SetActive(false);
+        
+        SetName();
 
         startUI.interactable = false;
+        startUI.blocksRaycasts = false;
         feedback_fadeStartUI.PlayFeedbacks();
         
         Debug.Log("hiding all");
@@ -91,8 +146,6 @@ public class GameController : MonoBehaviour
     public void StartGame()
     {
         gameStarted = true;
-        
-        Leaderboard.Instance.SetName();
     }
 
     private void Update()
@@ -144,13 +197,29 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
-        GameOverUI.SetActive(true);
+        // GameOverUI.SetActive(true);
         gameOver = true;
 
-        Leaderboard.Instance.FinalizeScore();
+        endLeaderboard.FinalizeScore();
 
         laserSpawner.TurnOff();
         
         HideGame();
+        
+        feedback_fadeEndUI.PlayFeedbacks();
+    }
+
+    public void Retry()
+    {
+        Debug.Log("Called this!");
+        
+        PlayerPrefs.SetString("savedName", currentName);
+        
+        SceneManager.LoadScene(0);
+    }
+
+    public void RestartNewPlayer()
+    {
+        SceneManager.LoadScene(0);
     }
 }

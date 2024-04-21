@@ -12,17 +12,12 @@ public struct HighScoreData
 
 public class Leaderboard : MonoBehaviour
 {
-    public static Leaderboard Instance;
-
     public int numScoresOnLeaderboard = 10;
 
     public Transform leaderboardEntryParent;
     public LeaderboardEntry leaderboardEntryPrefab;
-    
-    [Header("Name Entry")]
-    public TMP_InputField nameInputField;
-    
-    
+
+
     private string highScoreNamePrefix = "highScore_PlayerName";
     
     private string highScorePointsPrefix = "highScore_PlayerScore";
@@ -31,27 +26,12 @@ public class Leaderboard : MonoBehaviour
     
     private string highScoreRankPrefix = "highScore_PlayerRank";
     
-    private string savedName = "Test";
 
     private void Awake()
     {
-        Instance = this;
-
         ShowLeaderboard(LoadTopXScores(numScoresOnLeaderboard));
-
-        nameInputField.interactable = true;
-        savedName = PlayerPrefs.GetString("savedName");
-        nameInputField.text = savedName;
     }
 
-    public void SetName()
-    {
-        PlayerPrefs.SetString("savedName", nameInputField.text);
-        savedName = PlayerPrefs.GetString("savedName");
-
-        nameInputField.interactable = false;
-    }
-    
     [ContextMenu("Clear Scores")]
     public void ClearScores()
     {
@@ -64,7 +44,7 @@ public class Leaderboard : MonoBehaviour
 
         HighScoreData currentPlayer = new HighScoreData
         {
-            playerName = savedName,
+            playerName = GameController.Instance.currentName,
             playerScore = GameController.Instance.score,
             rank = 999,
         };
