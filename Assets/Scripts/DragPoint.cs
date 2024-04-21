@@ -18,6 +18,8 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (GameController.Instance.gameOver)
             return;
+
+        Debug.Log("Hovering");
         
         hoverFeedback.PlayFeedbacks();
     }
@@ -26,6 +28,8 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         if (GameController.Instance.gameOver)
             return;
+
+        Debug.Log("Unhovering");
         
         unhoverFeedback.PlayFeedbacks();
     }

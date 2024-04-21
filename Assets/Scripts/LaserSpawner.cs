@@ -53,7 +53,7 @@ public class LaserSpawner : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, remainingLength, layerMask);
             if (hit)
             {
-                Debug.Log("HIT " + hit.collider.name);
+                // Debug.Log("HIT " + hit.collider.name);
 
                 Target target = hit.collider.gameObject.GetComponent<Target>();
                 if (target != null)
