@@ -34,6 +34,8 @@ public class GameController : MonoBehaviour
 
     public ScreenFillSpawner screenFillSpawner;
     
+    private FMOD.Studio.EventInstance fmodStudioEvent;
+    
     private void Awake()
     {
         Instance = this;
@@ -54,6 +56,10 @@ public class GameController : MonoBehaviour
     public void ShowGame()
     {
         Debug.Log("hiding all");
+        
+        // fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/show_game");
+        // fmodStudioEvent.start();
+        // fmodStudioEvent.release();
 
         screenFillSpawner.Spawn();
         
@@ -62,6 +68,10 @@ public class GameController : MonoBehaviour
 
     public void HideGame()
     {
+        // fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/show_game");
+        // fmodStudioEvent.start();
+        // fmodStudioEvent.release();
+        
         screenFillSpawner.ShowAllScreenFillers();
     }
 
@@ -89,6 +99,10 @@ public class GameController : MonoBehaviour
         {
             timer = 0;
             GameOver();
+            
+            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/timer_final");
+            fmodStudioEvent.start();
+            fmodStudioEvent.release();
 
             return;
         }
@@ -101,6 +115,10 @@ public class GameController : MonoBehaviour
                 feedback_lowTime.PlayFeedbacks();
                 
                 timeUntilBeepTimer = timeBetweenBeeps;
+                
+                fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/timer_beep");
+                fmodStudioEvent.start();
+                fmodStudioEvent.release();
             }
         }
     }
