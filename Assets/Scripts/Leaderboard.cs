@@ -37,7 +37,7 @@ public class Leaderboard : MonoBehaviour
     {
         Instance = this;
 
-        ShowLeaderboard(LoadTopXScores(10));
+        ShowLeaderboard(LoadTopXScores(numScoresOnLeaderboard));
 
         nameInputField.interactable = true;
         savedName = PlayerPrefs.GetString("savedName");
@@ -60,7 +60,7 @@ public class Leaderboard : MonoBehaviour
     
     public void FinalizeScore()
     {
-        List<HighScoreData> topScores = LoadTopXScores(numScoresOnLeaderboard);
+        List<HighScoreData> topScores = LoadTopXScores(numScoresOnLeaderboard - 1);
 
         HighScoreData currentPlayer = new HighScoreData
         {
