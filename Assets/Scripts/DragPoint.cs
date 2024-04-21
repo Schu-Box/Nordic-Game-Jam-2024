@@ -22,6 +22,8 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         Debug.Log("Hovering");
         
         hoverFeedback.PlayFeedbacks();
+        
+        
     }
     
     public void OnPointerExit(PointerEventData eventData)

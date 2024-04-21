@@ -17,11 +17,6 @@ public class ScreenFillSpawner : MonoBehaviour
    public float durationBetweenRingReveals = 0.3f;
 
    public float offsetMaxRange = 0.5f;
-   
-   private void Start()
-   {
-      
-   }
 
    public void Spawn()
    {
