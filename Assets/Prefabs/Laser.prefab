@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 5902125685031056301}
   - component: {fileID: 1572611536924366011}
   m_Layer: 7
-  m_Name: LaserLine (2)
+  m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -124,7 +124,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4566700737367178134}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -137,7 +137,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 09aa345cb3d63e34a92b1efc5cdccc8c, type: 2}
+  - {fileID: 2100000, guid: e98c0e1d696009f44b5053469daf998e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -161,8 +161,6 @@ LineRenderer:
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
-  - {x: 1.0823079, y: 16.831663, z: 3.1189141}
-  - {x: 3.670053, y: 17.970179, z: 3.1189141}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -211,7 +209,7 @@ LineRenderer:
       m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 0
+    numCornerVertices: 10
     numCapVertices: 0
     alignment: 1
     textureMode: 0
@@ -262,7 +260,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5328734656841405496}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -275,7 +273,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: e513535e426af224c8e8db87d1f07ef1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -307,7 +305,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.10000229
+        value: 0.11
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -347,7 +345,7 @@ LineRenderer:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 0
+    numCornerVertices: 10
     numCapVertices: 0
     alignment: 1
     textureMode: 0
