@@ -2208,6 +2208,14 @@ PrefabInstance:
       propertyPath: managedReferences[8201344576743276544].AnimateScaleTweenZ.Curve.m_Curve.Array.data[1].weightedMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1497289156806368862, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1497289156806368862, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 199817463
+      objectReference: {fileID: 0}
     - target: {fileID: 1517921893291839393, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: FeedbacksList.Array.data[0]
       value: 8201344576743276547
@@ -3967,6 +3975,30 @@ PrefabInstance:
     - target: {fileID: 1888559140277443203, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: m_Name
       value: Anchor_v2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300446639701450834, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300446639701450834, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 199817463
+      objectReference: {fileID: 0}
+    - target: {fileID: 2722317102729040642, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2722317102729040642, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 199817463
+      objectReference: {fileID: 0}
+    - target: {fileID: 5386744945504951899, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5386744945504951899, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 199817463
       objectReference: {fileID: 0}
     - target: {fileID: 7240899870610853206, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: FeedbacksList.Array.data[0]

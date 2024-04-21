@@ -39,20 +39,20 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Backdrop
     uniqueID: 3570622009
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0
   - name: Laser
     uniqueID: 1918450023
     locked: 0
-  - name: GameElements
-    uniqueID: 199817463
-    locked: 0
   - name: OuterRing
     uniqueID: 2016559633
+    locked: 0
+  - name: GameElements
+    uniqueID: 199817463
     locked: 0
   - name: UI InGame
     uniqueID: 1854359723
