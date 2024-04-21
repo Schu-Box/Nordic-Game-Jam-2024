@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI scoreText;
 
+    public MMF_Player feedback_lowTime;
+
     public GameObject GameOverUI;
 
     public float timeLimit = 60f;
@@ -24,6 +27,10 @@ public class GameController : MonoBehaviour
 
     public bool gameStarted = false;
     public bool gameOver = false;
+
+    public float timeRemainingWhenBeepsStart = 10f;
+    public float timeBetweenBeeps = 1f;
+    private float timeUntilBeepTimer = 0f;
     
     private void Awake()
     {
@@ -63,6 +70,19 @@ public class GameController : MonoBehaviour
         {
             timer = 0;
             GameOver();
+
+            return;
+        }
+        
+        if(timer <= timeRemainingWhenBeepsStart)
+        {
+            timeUntilBeepTimer -= Time.deltaTime;
+            if(timeUntilBeepTimer <= 0)
+            {
+                feedback_lowTime.PlayFeedbacks();
+                
+                timeUntilBeepTimer = timeBetweenBeeps;
+            }
         }
     }
     
