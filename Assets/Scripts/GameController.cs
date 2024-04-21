@@ -41,6 +41,7 @@ public class GameController : MonoBehaviour
         GameOverUI.SetActive(false);
         
         timer = timeLimit;
+        timerText.text = timer.ToString("F1");
     }
 
     private void Start()
