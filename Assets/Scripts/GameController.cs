@@ -31,8 +31,8 @@ public class GameController : MonoBehaviour
     public float timeRemainingWhenBeepsStart = 10f;
     public float timeBetweenBeeps = 1f;
     private float timeUntilBeepTimer = 0f;
-    
-    public ScreenFillerTriggerer screenFillerTriggerer;
+
+    public ScreenFillSpawner screenFillSpawner;
     
     private void Awake()
     {
@@ -46,16 +46,18 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
+
+        ShowGame();
     }
 
     public void ShowGame()
     {
-        screenFillerTriggerer.StartGrow();
+        screenFillSpawner.HideAllScreenFillers();
     }
 
     public void HideGame()
     {
-        screenFillerTriggerer.StartShrink();
+        screenFillSpawner.ShowAllScreenFillers();
     }
 
     public void StartGame()
@@ -112,5 +114,7 @@ public class GameController : MonoBehaviour
         Leaderboard.Instance.FinalizeScore();
 
         laserSpawner.TurnOff();
+        
+        HideGame();
     }
 }
