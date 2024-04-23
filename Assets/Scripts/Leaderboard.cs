@@ -8,6 +8,8 @@ public struct HighScoreData
     public int rank;
     public string playerName;
     public int playerScore;
+
+    public bool isMostRecent;
 }
 
 public class Leaderboard : MonoBehaviour
@@ -47,6 +49,7 @@ public class Leaderboard : MonoBehaviour
             playerName = GameController.Instance.currentName,
             playerScore = GameController.Instance.score,
             rank = 999,
+            isMostRecent = true,
         };
         
         topScores.Add(currentPlayer);
@@ -96,6 +99,7 @@ public class Leaderboard : MonoBehaviour
             highScoreData.playerName = PlayerPrefs.GetString(playerNameKey);
             highScoreData.playerScore = PlayerPrefs.GetInt(pointsKey);
             highScoreData.rank = PlayerPrefs.GetInt(rankKey);
+            highScoreData.isMostRecent = false;
             
             topScoreData.Add(highScoreData);
         }
@@ -114,7 +118,7 @@ public class Leaderboard : MonoBehaviour
         foreach (HighScoreData highScore in topScores)
         {
             LeaderboardEntry newEntry = Instantiate(leaderboardEntryPrefab, leaderboardEntryParent);
-            newEntry.ShowScore(highScore);   
+            newEntry.ShowScore(highScore);
         }
     }
 }

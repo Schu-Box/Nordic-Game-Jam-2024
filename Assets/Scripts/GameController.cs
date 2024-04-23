@@ -69,6 +69,8 @@ public class GameController : MonoBehaviour
         GameOverUI.SetActive(false);
 
         endUI.alpha = 0f;
+        endUI.interactable = false;
+        endUI.blocksRaycasts = false;
         
         timer = timeLimit;
         timerText.text = timer.ToString("F1");
@@ -105,7 +107,6 @@ public class GameController : MonoBehaviour
         // savedName = PlayerPrefs.GetString("savedName");
 
         // nameInputField.interactable = false;
-        playerNameText.text = currentName;
     }
 
     private void Start()
@@ -115,11 +116,16 @@ public class GameController : MonoBehaviour
         // ShowGame();
     }
 
+    public void ShowGameFromMainMenu()
+    {
+        SetName();
+        ShowGame();
+    }
+
     public void ShowGame()
     {
         // startUI.SetActive(false);
-        
-        SetName();
+        playerNameText.text = currentName;
 
         startUI.interactable = false;
         startUI.blocksRaycasts = false;
@@ -163,7 +169,7 @@ public class GameController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            SceneManager.LoadScene(0);
         }
         
         if (!gameStarted || gameOver)
@@ -218,6 +224,9 @@ public class GameController : MonoBehaviour
         HideGame();
         
         feedback_fadeEndUI.PlayFeedbacks();
+        
+        endUI.interactable = true;
+        endUI.blocksRaycasts = true;
     }
 
     public void Retry()
