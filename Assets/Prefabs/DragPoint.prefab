@@ -452,6 +452,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3295181533955974928}
     m_Modifications:
+    - target: {fileID: 388170052595478587, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
+      propertyPath: managedReferences[8201344553012166679].AnimateScaleDuration
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 604687935883446003, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: FeedbacksList.Array.data[0]
       value: 8201344576743276544
@@ -970,7 +974,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 604687935883446003, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: managedReferences[8201344576743276544].AnimateScaleDuration
-      value: 0.4
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 604687935883446003, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: managedReferences[8201344576743276544].DetermineScaleOnPlay
@@ -2734,7 +2738,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1517921893291839393, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: managedReferences[8201344576743276547].AnimateScaleDuration
-      value: 0.4
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1517921893291839393, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: managedReferences[8201344576743276547].DetermineScaleOnPlay
@@ -4518,7 +4522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7240899870610853206, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: managedReferences[8201344576743276550].AnimateScaleDuration
-      value: 0.2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7240899870610853206, guid: 2e8bfb4934fe5794382cb8abbc677d14, type: 3}
       propertyPath: managedReferences[8201344576743276550].DetermineScaleOnPlay

@@ -10,6 +10,7 @@ public class GameController : MonoBehaviour
     public static GameController Instance;
 
     [Header("Start UI")]
+    public GameObject blackBackground;
     public CanvasGroup startUI;
     public MMF_Player feedback_fadeInStartUI;
     public MMF_Player feedback_fadeOutStartUI;
@@ -42,8 +43,11 @@ public class GameController : MonoBehaviour
     public float timer;
     public int score;
 
-    public bool gameStarted = false;
-    public bool gameOver = false;
+    private bool gameShown = false;
+    public bool GameShown => gameShown;
+    
+    private bool gameStarted = false;
+    private bool gameOver = false;
 
     public float timeRemainingWhenBeepsStart = 10f;
     public float timeBetweenBeeps = 1f;
@@ -65,6 +69,8 @@ public class GameController : MonoBehaviour
     
     private void Awake()
     {
+        blackBackground.SetActive(true);
+        
         Instance = this;
 
         endUI.alpha = 0f;
@@ -116,8 +122,11 @@ public class GameController : MonoBehaviour
 
     public void ShowGame()
     {
+        gameShown = true;
         // startUI.SetActive(false);
         playerNameText.text = currentName;
+
+        blackBackground.SetActive(false);
 
         startUI.interactable = false;
         startUI.blocksRaycasts = false;
@@ -148,6 +157,11 @@ public class GameController : MonoBehaviour
         fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/end_transition");
         fmodStudioEvent.start();
         fmodStudioEvent.release();
+    }
+
+    public bool CanInteract()
+    {
+        return gameShown && !gameOver;
     }
 
     public void StartGame()

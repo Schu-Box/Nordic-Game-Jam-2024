@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class LineManager : MonoBehaviour
 {
@@ -26,6 +28,8 @@ public class LineManager : MonoBehaviour
       {
          Destroy(gameObject);
       }
+
+      LeanTween.reset();
    }
 
    public bool LineCanBeCreated(DragPoint origin, DragPoint destination)
@@ -37,7 +41,7 @@ public class LineManager : MonoBehaviour
       
       foreach (Line line in lineList)
       {
-         if(line.origin == origin && line.destination == destination || line.origin == destination && line.destination == origin)
+         if(line.dragPointOrigin == origin && line.dragPointDestination == destination || line.dragPointOrigin == destination && line.dragPointDestination == origin)
          {
             return false;
          }
@@ -58,13 +62,18 @@ public class LineManager : MonoBehaviour
 
       
       Line newLine = new GameObject("Line").AddComponent<Line>();
-      newLine.Generate(origin, destination, isStartingGate);
+      newLine.transform.parent = transform;
+      newLine.GenerateMirror(origin, destination, isStartingGate);
 
       lineList.Add(newLine);
    }
 
-   public void DestroyLine(Line line)
+   // private float durationBreak = 0.2f;
+   
+   public void BreakLine(Line line, Vector2 breakPoint)
    {
+      Debug.Log("Breaking line : " + line.gameObject.name);
+      
       if (line.isStartingGate)
       {
          GameController.Instance.StartGame();
@@ -72,6 +81,27 @@ public class LineManager : MonoBehaviour
       
       lineList.Remove(line);
       
+      CreateSnapLine(breakPoint, line.dragPointOrigin);
+      CreateSnapLine(breakPoint, line.dragPointDestination);
+      
       Destroy(line.gameObject);
+   }
+
+   private void CreateSnapLine(Vector2 breakPoint, DragPoint snapToPoint)
+   {
+      Line newSnapLine = new GameObject("Line").AddComponent<Line>();
+      newSnapLine.GenerateLineRenderer(snapToPoint.transform.position, breakPoint);
+      newSnapLine.transform.parent = transform;
+
+      // snapToPoint.deselectFeedback.PlayFeedbacks();
+
+      LeanTween.value(newSnapLine.gameObject, breakPoint, (Vector2)snapToPoint.transform.position, 0.2f).setEaseOutCubic().setOnUpdate((Vector3 val) =>
+      {
+         newSnapLine.lineRenderer.SetPosition(1, val);
+      }).setOnComplete(() =>
+      {
+         snapToPoint.deselectFeedback.PlayFeedbacks();
+         Destroy(newSnapLine.gameObject);
+      });
    }
 }

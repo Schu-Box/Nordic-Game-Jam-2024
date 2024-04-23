@@ -33,7 +33,7 @@ public class InputManager : MonoBehaviour
         //     lineCreationArrow.Show(false);
         // }
         
-        if (GameController.Instance.gameOver)
+        if (!GameController.Instance.CanInteract())
             return;
         
         if (Input.GetMouseButtonDown(0) && !LineManager.Instance.IsDraggingPoint)
@@ -76,13 +76,9 @@ public class InputManager : MonoBehaviour
             {
                 // Debug.Log("Hit " + hit.collider.name);
                 Line line = hit.collider.GetComponent<Line>();
-                if (line != null)
+                if (line != null && line.isActiveLine)
                 {
-                    LineManager.Instance.DestroyLine(hit.collider.GetComponent<Line>());
-                }
-                else
-                {
-                    Debug.LogWarning(hit.collider.name + " should not be on this layer! Was hit by cancellation arrow.");
+                    LineManager.Instance.BreakLine(hit.collider.GetComponent<Line>(), hit.point);
                 }
             }
             else

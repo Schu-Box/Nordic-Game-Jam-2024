@@ -18,10 +18,10 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (GameController.Instance.gameOver)
-            return;
+        // if (GameController.Instance.gameOver)
+        //     return;
 
-        Debug.Log("Hovering");
+        // Debug.Log("Hovering");
         
         hoverFeedback.PlayFeedbacks();
 
@@ -41,20 +41,21 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (GameController.Instance.gameOver)
-            return;
+        // if (GameController.Instance.gameOver)
+        //     return;
 
-        Debug.Log("Unhovering");
+        // Debug.Log("Unhovering");
         
         unhoverFeedback.PlayFeedbacks();
     }
     
     public void OnMouseDown()
     {
-        if (GameController.Instance.gameOver)
+        if (!GameController.Instance.CanInteract())
             return;
-        
+
         Debug.Log("Start drag at " + transform.position);
+        
         LineManager.Instance.IsDraggingPoint = true;
         LineManager.Instance.lastDragPoint = this;
         
@@ -67,7 +68,7 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnMouseDrag()
     {
-        if (GameController.Instance.gameOver)
+        if (!GameController.Instance.CanInteract())
             return;
         
         Vector2 destinationPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -86,15 +87,12 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         LineManager.Instance.IsDraggingPoint = false;
         LineManager.Instance.lastDragPoint = null;
         InputManager.Instance.lineCreationArrow.Show(false);
-        
-        if (GameController.Instance.gameOver)
-            return;
-        
+
         Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // Debug.Log("End drag at " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
         
         DragPoint overlappingDragPoint = OverlappingDragPoint(worldPoint);
-        if (OverlappingDragPoint(worldPoint) != null)
+        if (OverlappingDragPoint(worldPoint) != null && GameController.Instance.CanInteract())
         {
             LineManager.Instance.CreateLineBetweenDragPoints(this, overlappingDragPoint);
 
@@ -104,18 +102,20 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             fmodStudioEvent.start();
             fmodStudioEvent.release();
         }
-        else //missed, cancel line
+        else if (GameController.Instance.GameShown) //missed, cancel line
         {
-            Debug.Log("CANCEL!");
+            // Debug.Log("CANCEL!");
 
             fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_drop");
             fmodStudioEvent.start();
             fmodStudioEvent.release();
             
-            if (LineManager.Instance.lastDragPoint != null)
-            {
-                LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
-            }
+            deselectFeedback.PlayFeedbacks();
+            
+            // if (LineManager.Instance.lastDragPoint != null)
+            // {
+            //     LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
+            // }
         }
     }
 
