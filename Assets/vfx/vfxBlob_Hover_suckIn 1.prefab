@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5086720676659340405}
   - component: {fileID: 731064665839233349}
   - component: {fileID: 5228543930167777768}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: vfxBlob_Hover_suckIn 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
