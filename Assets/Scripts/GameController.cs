@@ -54,9 +54,7 @@ public class GameController : MonoBehaviour
     private float timeUntilBeepTimer = 0f;
 
     public ScreenFillSpawner screenFillSpawner;
-    
-    private FMOD.Studio.EventInstance fmodStudioEvent;
-    
+
     [Header("Name Entry")]
     public TMP_InputField nameInputField;
     
@@ -113,6 +111,8 @@ public class GameController : MonoBehaviour
     {
         InputNewName();
         ShowGame();
+        
+        AudioManager.Instance.PlayEvent("event:/start_button_press");
     }
 
     private void InputNewName()
@@ -134,9 +134,7 @@ public class GameController : MonoBehaviour
         
         Debug.Log("hiding all");
         
-        fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/start_transition");
-        fmodStudioEvent.start();
-        fmodStudioEvent.release();
+       AudioManager.Instance.PlayEvent("event:/start_transition");
 
         screenFillSpawner.Spawn();
         
@@ -153,10 +151,8 @@ public class GameController : MonoBehaviour
     private IEnumerator PlaySoundAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        
-        fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/end_transition");
-        fmodStudioEvent.start();
-        fmodStudioEvent.release();
+
+        AudioManager.Instance.PlayEvent("event:/end_transition");
     }
 
     public bool CanInteract()
@@ -189,9 +185,7 @@ public class GameController : MonoBehaviour
             timer = 0;
             GameOver();
             
-            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/timer_final");
-            fmodStudioEvent.start();
-            fmodStudioEvent.release();
+            AudioManager.Instance.PlayEvent("event:/timer_final");
 
             return;
         }
@@ -205,9 +199,7 @@ public class GameController : MonoBehaviour
                 
                 timeUntilBeepTimer = timeBetweenBeeps;
                 
-                fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/timer_beep");
-                fmodStudioEvent.start();
-                fmodStudioEvent.release();
+                AudioManager.Instance.PlayEvent("event:/timer_beep");
             }
         }
     }
@@ -250,6 +242,8 @@ public class GameController : MonoBehaviour
     private void RestartScene()
     {
         // Debug.Log("RESTART!");
+        
+        AudioManager.Instance.PlayEvent("event:/start_button_press");
         
         endUI.blocksRaycasts = false;
         

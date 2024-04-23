@@ -7,8 +7,6 @@ public class Target : MonoBehaviour
 {
    public CircleCollider2D collie;
    public MMF_Player destroyFeedback;
-   
-   private FMOD.Studio.EventInstance fmodStudioEvent;
 
    private bool destroyed = false;
    public void Hit()
@@ -24,15 +22,11 @@ public class Target : MonoBehaviour
 
          collie.enabled = false;
       
-         fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/laser_hit");
-         fmodStudioEvent.start();
-         fmodStudioEvent.release();
+         AudioManager.Instance.PlayEvent("event:/laser_hit");
       }
       else //THIS WILL NEVER BE CALLED CUZ COLLIDER DISABLED
       {
-         fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/laser_static");
-         fmodStudioEvent.start();
-         fmodStudioEvent.release();
+         AudioManager.Instance.PlayEvent("event:/laser_static");
       }
    }
 }

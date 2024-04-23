@@ -13,8 +13,6 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     private float timerBeforeMovement;
     private Coroutine movementCoroutine;
-    
-    private FMOD.Studio.EventInstance fmodStudioEvent;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -27,15 +25,11 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         if (LineManager.Instance.IsDraggingPoint)
         {
-            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_hover_with_line");
-            fmodStudioEvent.start();
-            fmodStudioEvent.release();
+            AudioManager.Instance.PlayEvent("event:/anchor_hover_with_line");
         }
         else
         {
-            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/hover_cursor");
-            fmodStudioEvent.start();
-            fmodStudioEvent.release();  
+            AudioManager.Instance.PlayEvent("event:/hover_cursor");
         }
     }
     
@@ -54,16 +48,14 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (!GameController.Instance.CanInteract())
             return;
 
-        Debug.Log("Start drag at " + transform.position);
+        // Debug.Log("Start drag at " + transform.position);
         
         LineManager.Instance.IsDraggingPoint = true;
         LineManager.Instance.lastDragPoint = this;
         
         selectFeedback.PlayFeedbacks();
         
-        fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_select");
-        fmodStudioEvent.start();
-        fmodStudioEvent.release();
+        AudioManager.Instance.PlayEvent("event:/anchor_select");
     }
 
     public void OnMouseDrag()
@@ -98,17 +90,13 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
             overlappingDragPoint.deselectFeedback.PlayFeedbacks();
             
-            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_snap");
-            fmodStudioEvent.start();
-            fmodStudioEvent.release();
+            AudioManager.Instance.PlayEvent("event:/anchor_snap");
         }
         else if (GameController.Instance.GameShown) //missed, cancel line
         {
             // Debug.Log("CANCEL!");
 
-            fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/anchor_drop");
-            fmodStudioEvent.start();
-            fmodStudioEvent.release();
+            AudioManager.Instance.PlayEvent("event:/anchor_drop");
             
             deselectFeedback.PlayFeedbacks();
             

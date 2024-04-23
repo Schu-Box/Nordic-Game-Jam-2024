@@ -84,6 +84,9 @@ public class LineManager : MonoBehaviour
       CreateSnapLine(breakPoint, line.dragPointOrigin);
       CreateSnapLine(breakPoint, line.dragPointDestination);
       
+      
+      AudioManager.Instance.PlayEvent("event:/line_snip");
+      
       Destroy(line.gameObject);
    }
 
