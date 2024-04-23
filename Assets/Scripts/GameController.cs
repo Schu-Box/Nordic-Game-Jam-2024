@@ -11,11 +11,13 @@ public class GameController : MonoBehaviour
 
     [Header("Start UI")]
     public CanvasGroup startUI;
-    public MMF_Player feedback_fadeStartUI;
+    public MMF_Player feedback_fadeInStartUI;
+    public MMF_Player feedback_fadeOutStartUI;
 
     [Header("End UI")]
     public CanvasGroup endUI;
-    public MMF_Player feedback_fadeEndUI;
+    public MMF_Player feedback_fadeInEndUI;
+    public MMF_Player feedback_fadeOutEndUI;
 
     public Leaderboard endLeaderboard;
 
@@ -34,8 +36,7 @@ public class GameController : MonoBehaviour
 
     public MMF_Player feedback_lowTime;
 
-    public GameObject GameOverUI;
-
+    [Header("Variables")]
     public float timeLimit = 60f;
 
     public float timer;
@@ -65,8 +66,6 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        
-        GameOverUI.SetActive(false);
 
         endUI.alpha = 0f;
         endUI.interactable = false;
@@ -89,15 +88,12 @@ public class GameController : MonoBehaviour
         else
         {
             Debug.Log("was no save");
-            
-            // startUI.gameObject.SetActive(true);
+
+            startUI.alpha = 0f;
+            feedback_fadeInStartUI.PlayFeedbacks();
         }
         
         PlayerPrefs.SetString("savedName", "");
-
-        // nameInputField.interactable = true;
-        // savedName = PlayerPrefs.GetString("savedName");
-        // nameInputField.text = savedName;
     }
 
     private void Start()
@@ -125,7 +121,7 @@ public class GameController : MonoBehaviour
 
         startUI.interactable = false;
         startUI.blocksRaycasts = false;
-        feedback_fadeStartUI.PlayFeedbacks();
+        feedback_fadeOutStartUI.PlayFeedbacks();
         
         Debug.Log("hiding all");
         
@@ -219,7 +215,7 @@ public class GameController : MonoBehaviour
         
         HideGame();
         
-        feedback_fadeEndUI.PlayFeedbacks();
+        feedback_fadeInEndUI.PlayFeedbacks();
         
         endUI.interactable = true;
         endUI.blocksRaycasts = true;
@@ -227,15 +223,22 @@ public class GameController : MonoBehaviour
 
     public void Retry()
     {
-        Debug.Log("Called this!");
-        
         PlayerPrefs.SetString("savedName", currentName);
         
-        SceneManager.LoadScene(0);
+        RestartScene();
     }
 
     public void RestartNewPlayer()
     {
-        SceneManager.LoadScene(0);
+        RestartScene();
+    }
+
+    private void RestartScene()
+    {
+        // Debug.Log("RESTART!");
+        
+        endUI.blocksRaycasts = false;
+        
+        feedback_fadeOutEndUI.PlayFeedbacks(); //Actual restart is called by the end of this feedback
     }
 }

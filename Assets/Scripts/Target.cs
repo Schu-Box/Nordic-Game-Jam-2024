@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-   public CircleCollider2D collider;
+   public CircleCollider2D collie;
    public MMF_Player destroyFeedback;
    
    private FMOD.Studio.EventInstance fmodStudioEvent;
@@ -22,7 +22,7 @@ public class Target : MonoBehaviour
       
          destroyFeedback?.PlayFeedbacks();
 
-         collider.enabled = false;
+         collie.enabled = false;
       
          fmodStudioEvent = FMODUnity.RuntimeManager.CreateInstance("event:/laser_hit");
          fmodStudioEvent.start();
