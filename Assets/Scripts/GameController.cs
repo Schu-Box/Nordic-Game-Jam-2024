@@ -59,8 +59,8 @@ public class GameController : MonoBehaviour
     
     public string currentName = "";
     
-    [Header("Music")]
-    public FMODUnity.StudioEventEmitter musicEmitter;
+    // [Header("Music")]
+    // public FMODUnity.StudioEventEmitter musicEmitter;
     
     private void Awake()
     {
@@ -99,15 +99,6 @@ public class GameController : MonoBehaviour
         // savedName = PlayerPrefs.GetString("savedName");
         // nameInputField.text = savedName;
     }
-    
-    public void SetName()
-    {
-        currentName = nameInputField.text;
-        // PlayerPrefs.SetString("savedName", nameInputField.text);
-        // savedName = PlayerPrefs.GetString("savedName");
-
-        // nameInputField.interactable = false;
-    }
 
     private void Start()
     {
@@ -118,8 +109,13 @@ public class GameController : MonoBehaviour
 
     public void ShowGameFromMainMenu()
     {
-        SetName();
+        InputNewName();
         ShowGame();
+    }
+
+    private void InputNewName()
+    {
+        currentName = nameInputField.text;
     }
 
     public void ShowGame()
