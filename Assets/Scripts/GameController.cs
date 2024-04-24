@@ -37,6 +37,9 @@ public class GameController : MonoBehaviour
 
     public MMF_Player feedback_lowTime;
 
+    [Header("Gameplay")]
+    public List<DragPoint> dragPointList = new List<DragPoint>();
+
     [Header("Variables")]
     public float timeLimit = 60f;
 
@@ -102,9 +105,10 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
-
-        // ShowGame();
+        Debug.Log("Debug mode enabled");
+        //Debug purposes
+        // LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
+        ShowGame();
     }
 
     public void ShowGameFromMainMenu()
@@ -134,12 +138,57 @@ public class GameController : MonoBehaviour
         
         Debug.Log("hiding all");
         
-       AudioManager.Instance.PlayEvent("event:/start_transition");
+        AudioManager.Instance.PlayEvent("event:/start_transition");
 
         screenFillSpawner.Spawn();
         
         screenFillSpawner.HideAllScreenFillers();
+
+        TriggerNewUnstableDragPoint();
     }
+    
+#region Arcade Gameplay
+
+    private void TriggerNewUnstableDragPoint()
+    {
+        List<DragPoint> stableDragPoints = new List<DragPoint>();
+        foreach (DragPoint dragPoint in dragPointList)
+        {
+            if (!dragPoint.IsUnstable)
+            {
+                stableDragPoints.Add(dragPoint);
+            }
+        }
+        
+        if (stableDragPoints.Count == 0)
+        {
+            Debug.LogWarning("No stable drag points to make unstable");
+            return;
+        }
+        
+        int randomIndex = Random.Range(0, stableDragPoints.Count);
+        stableDragPoints[randomIndex].TriggerUnstability();
+    }
+
+    public void RemoveDragPoint(DragPoint dragPoint)
+    {
+        dragPointList.Remove(dragPoint);
+
+        if (InputManager.Instance.IsDraggingPoint && InputManager.Instance.lastDragPoint == dragPoint)
+        {
+            Debug.Log("Dragging dis but no longer");
+            
+            InputManager.Instance.CancelDrag(dragPoint);
+        }
+        
+        LineManager.Instance.BreakAllLinesConnectedToDragPoint(dragPoint);
+
+        TriggerNewUnstableDragPoint();
+        
+        //TODO: Spawn new dragPoint somewhere
+    }
+
+#endregion
 
     public void HideGame()
     {

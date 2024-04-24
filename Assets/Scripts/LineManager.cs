@@ -13,9 +13,6 @@ public class LineManager : MonoBehaviour
 
    public Material lineMaterial;
 
-   public DragPoint lastDragPoint = null;
-   public bool IsDraggingPoint = false;
-
    private List<Line> lineList = new List<Line>();
    
    private void Awake()
@@ -54,11 +51,11 @@ public class LineManager : MonoBehaviour
    {
       if(!LineCanBeCreated(origin, destination))
       {
-         Debug.Log("Can't create line between " + origin.name + " and " + destination.name + " because it already exists.");
+         // Debug.Log("Can't create line between " + origin.name + " and " + destination.name + " because it already exists.");
          return;
       }
       
-      Debug.Log("Creating line between " + origin.name + " and " + destination.name);
+      // Debug.Log("Creating line between " + origin.name + " and " + destination.name);
 
       
       Line newLine = new GameObject("Line").AddComponent<Line>();
@@ -106,5 +103,17 @@ public class LineManager : MonoBehaviour
          snapToPoint.deselectFeedback.PlayFeedbacks();
          Destroy(newSnapLine.gameObject);
       });
+   }
+
+   public void BreakAllLinesConnectedToDragPoint(DragPoint dragPoint)
+   {
+      for(int i = lineList.Count - 1; i >= 0; i--)
+      {
+         Line line = lineList[i];
+         if (line.dragPointOrigin == dragPoint || line.dragPointDestination == dragPoint)
+         {
+            BreakLine(line, dragPoint.transform.position);
+         }
+      }
    }
 }

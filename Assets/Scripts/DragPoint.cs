@@ -6,13 +6,27 @@ using UnityEngine.EventSystems;
 
 public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    [Header("Feedbacks")]
     public MMF_Player selectFeedback;
     public MMF_Player deselectFeedback;
     public MMF_Player hoverFeedback;
     public MMF_Player unhoverFeedback;
+    
+    public MMF_Player unstableFeedback;
+    public MMF_Player destroyFeedback;
+
+    public MMWiggle wiggle;
 
     private float timerBeforeMovement;
     private Coroutine movementCoroutine;
+    
+    private bool isUnstable = false;
+    public bool IsUnstable => isUnstable;
+
+    private void Start()
+    {
+        // wiggle.enabled = false;
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -23,7 +37,7 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         
         hoverFeedback.PlayFeedbacks();
 
-        if (LineManager.Instance.IsDraggingPoint)
+        if (InputManager.Instance.IsDraggingPoint)
         {
             AudioManager.Instance.PlayEvent("event:/anchor_hover_with_line");
         }
@@ -50,8 +64,8 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         // Debug.Log("Start drag at " + transform.position);
         
-        LineManager.Instance.IsDraggingPoint = true;
-        LineManager.Instance.lastDragPoint = this;
+        InputManager.Instance.IsDraggingPoint = true;
+        InputManager.Instance.lastDragPoint = this;
         
         selectFeedback.PlayFeedbacks();
         
@@ -61,6 +75,9 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void OnMouseDrag()
     {
         if (!GameController.Instance.CanInteract())
+            return;
+        
+        if(InputManager.Instance.lastDragPoint != this)
             return;
         
         Vector2 destinationPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -76,38 +93,23 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     
     public void OnMouseUp()
     {
-        LineManager.Instance.IsDraggingPoint = false;
-        LineManager.Instance.lastDragPoint = null;
-        InputManager.Instance.lineCreationArrow.Show(false);
-
-        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // Debug.Log("End drag at " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        if(InputManager.Instance.lastDragPoint != this)
+            return;
         
+        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         DragPoint overlappingDragPoint = OverlappingDragPoint(worldPoint);
+        
         if (OverlappingDragPoint(worldPoint) != null && GameController.Instance.CanInteract())
         {
-            LineManager.Instance.CreateLineBetweenDragPoints(this, overlappingDragPoint);
-
-            overlappingDragPoint.deselectFeedback.PlayFeedbacks();
-            
-            AudioManager.Instance.PlayEvent("event:/anchor_snap");
+            InputManager.Instance.CompleteDrag(this, overlappingDragPoint);
         }
         else if (GameController.Instance.GameShown) //missed, cancel line
         {
-            // Debug.Log("CANCEL!");
-
-            AudioManager.Instance.PlayEvent("event:/anchor_drop");
-            
-            deselectFeedback.PlayFeedbacks();
-            
-            // if (LineManager.Instance.lastDragPoint != null)
-            // {
-            //     LineManager.Instance.lastDragPoint.deselectFeedback.PlayFeedbacks();
-            // }
+            InputManager.Instance.CancelDrag(this);
         }
     }
 
-    private DragPoint OverlappingDragPoint(Vector3 position)
+    public DragPoint OverlappingDragPoint(Vector3 position)
     {
         RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero);
         if (hit.collider != null)
@@ -120,5 +122,44 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
 
         return null;
+    }
+
+    [Header("Unstability Variables")]
+    public Vector2 unstabilityDurationRange = new Vector2(2f, 4f);
+    public Vector2 unstabilityWiggleStartRange = new Vector2(0.5f, 0.8f);
+    public Vector2 unstabilityWiggleEndRange = new Vector2(1.2f, 1.5f);
+    public void TriggerUnstability()
+    {
+        isUnstable = true;
+        
+        wiggle.enabled = true;
+        unstableFeedback.PlayFeedbacks();
+
+        StartCoroutine(UnstabilityCoroutine());
+    }
+    private IEnumerator UnstabilityCoroutine()
+    {
+        //TODO: Enhance particle visuals over time?
+        
+        Vector3 startAmplitudeMin = new Vector3(unstabilityWiggleStartRange.x, unstabilityWiggleStartRange.x, 0f);
+        Vector3 startAmplitudeMax = new Vector3(unstabilityWiggleStartRange.y, unstabilityWiggleStartRange.y, 0f);
+        Vector3 endAmplitudeMin = new Vector3(unstabilityWiggleEndRange.x, unstabilityWiggleEndRange.x, 0f);
+        Vector3 endAmplitudeMax = new Vector3(unstabilityWiggleEndRange.y, unstabilityWiggleEndRange.y, 0f);
+
+        float duration = Random.Range(unstabilityDurationRange.x, unstabilityDurationRange.y);
+        float timer = 0f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+
+            float step = timer / duration;
+            wiggle.PositionWiggleProperties.AmplitudeMin = Vector3.Lerp(startAmplitudeMin, endAmplitudeMin, step);
+            wiggle.PositionWiggleProperties.AmplitudeMax = Vector3.Lerp(startAmplitudeMax, endAmplitudeMax, step);
+            
+            yield return null;
+        }
+        
+        destroyFeedback.PlayFeedbacks();
+        GameController.Instance.RemoveDragPoint(this);
     }
 }

@@ -13,6 +13,9 @@ public class InputManager : MonoBehaviour
 
     public bool IsDraggingCancellation = false;
     private Vector3 startDragCancellationPosition;
+    
+    public DragPoint lastDragPoint = null;
+    public bool IsDraggingPoint = false;
 
     
     private void Awake()
@@ -36,7 +39,7 @@ public class InputManager : MonoBehaviour
         if (!GameController.Instance.CanInteract())
             return;
         
-        if (Input.GetMouseButtonDown(0) && !LineManager.Instance.IsDraggingPoint)
+        if (Input.GetMouseButtonDown(0) && !IsDraggingPoint)
         {
             Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -98,5 +101,31 @@ public class InputManager : MonoBehaviour
     {
         lineCancellationArrow.SetArrow(start, end);
         lineCancellationArrow.Show(true);
+    }
+
+    public void CancelDrag(DragPoint dragPoint)
+    {
+        Debug.Log("cancel dat");
+        
+        IsDraggingPoint = false;
+        lastDragPoint = null;
+        lineCreationArrow.Show(false);
+
+        AudioManager.Instance.PlayEvent("event:/anchor_drop");
+            
+        dragPoint.deselectFeedback.PlayFeedbacks();
+    }
+    
+    public void CompleteDrag(DragPoint origin, DragPoint destination)
+    {
+        IsDraggingPoint = false;
+        lastDragPoint = null;
+        lineCreationArrow.Show(false);
+        
+        LineManager.Instance.CreateLineBetweenDragPoints(origin, destination);
+
+        destination.deselectFeedback.PlayFeedbacks();
+            
+        AudioManager.Instance.PlayEvent("event:/anchor_snap");
     }
 }
