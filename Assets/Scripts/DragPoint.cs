@@ -128,6 +128,12 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public Vector2 unstabilityDurationRange = new Vector2(2f, 4f);
     public Vector2 unstabilityWiggleStartRange = new Vector2(0.5f, 0.8f);
     public Vector2 unstabilityWiggleEndRange = new Vector2(1.2f, 1.5f);
+
+    public Vector2 unstabilityParticleEmissionRateRange = new Vector2(5f, 30f);
+
+    // public LeanTweenType easeType;
+
+    private ParticleSystem unstabilityParticles;
     public void TriggerUnstability()
     {
         isUnstable = true;
@@ -135,12 +141,12 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         wiggle.enabled = true;
         unstableFeedback.PlayFeedbacks();
 
+        unstabilityParticles = unstableFeedback.transform.GetComponentInChildren<ParticleSystem>();
+
         StartCoroutine(UnstabilityCoroutine());
     }
     private IEnumerator UnstabilityCoroutine()
     {
-        //TODO: Enhance particle visuals over time?
-        
         Vector3 startAmplitudeMin = new Vector3(unstabilityWiggleStartRange.x, unstabilityWiggleStartRange.x, 0f);
         Vector3 startAmplitudeMax = new Vector3(unstabilityWiggleStartRange.y, unstabilityWiggleStartRange.y, 0f);
         Vector3 endAmplitudeMin = new Vector3(unstabilityWiggleEndRange.x, unstabilityWiggleEndRange.x, 0f);
@@ -153,8 +159,16 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             timer += Time.deltaTime;
 
             float step = timer / duration;
+            step = LeanTween.easeInSine(0f, 1f, step);
+
+            // Debug.Log(step);
+            
             wiggle.PositionWiggleProperties.AmplitudeMin = Vector3.Lerp(startAmplitudeMin, endAmplitudeMin, step);
             wiggle.PositionWiggleProperties.AmplitudeMax = Vector3.Lerp(startAmplitudeMax, endAmplitudeMax, step);
+            
+            ParticleSystem.EmissionModule emissionModule = unstabilityParticles.emission;
+            emissionModule.rateOverTime = Mathf.Lerp(unstabilityParticleEmissionRateRange.x, unstabilityParticleEmissionRateRange.y, step);
+            unstabilityParticles.Play();
             
             yield return null;
         }

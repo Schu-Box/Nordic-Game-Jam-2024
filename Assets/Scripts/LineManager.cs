@@ -54,10 +54,7 @@ public class LineManager : MonoBehaviour
          // Debug.Log("Can't create line between " + origin.name + " and " + destination.name + " because it already exists.");
          return;
       }
-      
-      // Debug.Log("Creating line between " + origin.name + " and " + destination.name);
 
-      
       Line newLine = new GameObject("Line").AddComponent<Line>();
       newLine.transform.parent = transform;
       newLine.GenerateMirror(origin, destination, isStartingGate);
@@ -65,8 +62,6 @@ public class LineManager : MonoBehaviour
       lineList.Add(newLine);
    }
 
-   // private float durationBreak = 0.2f;
-   
    public void BreakLine(Line line, Vector2 breakPoint)
    {
       Debug.Log("Breaking line : " + line.gameObject.name);
@@ -80,8 +75,7 @@ public class LineManager : MonoBehaviour
       
       CreateSnapLine(breakPoint, line.dragPointOrigin);
       CreateSnapLine(breakPoint, line.dragPointDestination);
-      
-      
+
       AudioManager.Instance.PlayEvent("event:/line_snip");
       
       Destroy(line.gameObject);

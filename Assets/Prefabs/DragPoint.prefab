@@ -122,9 +122,10 @@ MonoBehaviour:
   unstableFeedback: {fileID: 483542201609169754}
   destroyFeedback: {fileID: 7751531258096433617}
   wiggle: {fileID: 6752133459852411576}
-  unstabilityDurationRange: {x: 6, y: 10}
+  unstabilityDurationRange: {x: 10, y: 16}
   unstabilityWiggleStartRange: {x: 0.05, y: 0.08}
   unstabilityWiggleEndRange: {x: 0.12, y: 0.15}
+  unstabilityParticleEmissionRateRange: {x: 50, y: 300}
 --- !u!114 &6752133459852411576
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -43,6 +43,8 @@ public class GameController : MonoBehaviour
     [Header("Variables")]
     public float timeLimit = 60f;
 
+    public int numUnstableDragPoints = 2;
+
     public float timer;
     public int score;
 
@@ -144,7 +146,10 @@ public class GameController : MonoBehaviour
         
         screenFillSpawner.HideAllScreenFillers();
 
-        TriggerNewUnstableDragPoint();
+        for(int i = 0; i < numUnstableDragPoints; i++)
+        {
+            TriggerNewUnstableDragPoint();
+        }
     }
     
 #region Arcade Gameplay
