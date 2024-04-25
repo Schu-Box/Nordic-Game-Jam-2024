@@ -6,6 +6,8 @@ using UnityEngine.EventSystems;
 
 public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    public Collider2D collie;
+    
     [Header("Feedbacks")]
     public MMF_Player selectFeedback;
     public MMF_Player deselectFeedback;

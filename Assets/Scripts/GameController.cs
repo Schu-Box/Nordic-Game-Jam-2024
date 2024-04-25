@@ -36,15 +36,28 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI scoreText;
 
     public MMF_Player feedback_lowTime;
+    
+    public ScreenFillSpawner screenFillSpawner;
 
     [Header("Gameplay")]
+    public Transform dragPointParent;
+    public DragPoint dragPointPrefab;
     public List<DragPoint> dragPointList = new List<DragPoint>();
+    
+    public float dragPointSpawnRadius;
+    public Vector2Int dragPointCountRange;
+    public float minDistanceBetweenDragPoints = 1f;
 
     [Header("Variables")]
     public float timeLimit = 60f;
 
     public int numUnstableDragPoints = 2;
+    
+    public float timeRemainingWhenBeepsStart = 10f;
+    public float timeBetweenBeeps = 1f;
+    private float timeUntilBeepTimer = 0f;
 
+    [Header("Should be private")]
     public float timer;
     public int score;
 
@@ -53,23 +66,14 @@ public class GameController : MonoBehaviour
     
     private bool gameStarted = false;
     private bool gameOver = false;
-
-    public float timeRemainingWhenBeepsStart = 10f;
-    public float timeBetweenBeeps = 1f;
-    private float timeUntilBeepTimer = 0f;
-
-    public ScreenFillSpawner screenFillSpawner;
-
+    
     [Header("Name Entry")]
     public TMP_InputField nameInputField;
     
     private string savedName = "";
     
     public string currentName = "";
-    
-    // [Header("Music")]
-    // public FMODUnity.StudioEventEmitter musicEmitter;
-    
+
     private void Awake()
     {
         blackBackground.SetActive(true);
@@ -110,6 +114,17 @@ public class GameController : MonoBehaviour
         Debug.Log("Debug mode enabled");
         //Debug purposes
         // LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
+        
+        //destroy all dragPoints
+        for(int i = dragPointList.Count - 1; i >= 0; i--)
+        {
+            DragPoint dragPoint = dragPointList[i];
+            Destroy(dragPoint.gameObject);
+            dragPointList.Remove(dragPoint);
+        }
+        
+        SpawnNewDragPoints();
+        
         ShowGame();
     }
 
@@ -137,9 +152,7 @@ public class GameController : MonoBehaviour
         startUI.interactable = false;
         startUI.blocksRaycasts = false;
         feedback_fadeOutStartUI.PlayFeedbacks();
-        
-        Debug.Log("hiding all");
-        
+
         AudioManager.Instance.PlayEvent("event:/start_transition");
 
         screenFillSpawner.Spawn();
@@ -181,7 +194,7 @@ public class GameController : MonoBehaviour
 
         if (InputManager.Instance.IsDraggingPoint && InputManager.Instance.lastDragPoint == dragPoint)
         {
-            Debug.Log("Dragging dis but no longer");
+            // Debug.Log("Dragging dis but no longer");
             
             InputManager.Instance.CancelDrag(dragPoint);
         }
@@ -189,8 +202,62 @@ public class GameController : MonoBehaviour
         LineManager.Instance.BreakAllLinesConnectedToDragPoint(dragPoint);
 
         TriggerNewUnstableDragPoint();
-        
-        //TODO: Spawn new dragPoint somewhere
+
+        SpawnNewDragPoints();
+    }
+
+    public void SpawnNewDragPoints()
+    {
+        int randomNumDragPoints = Random.Range(dragPointCountRange.x, dragPointCountRange.y);
+
+        for (int i = dragPointList.Count; i < randomNumDragPoints; i++)
+        {
+            Vector3 newPosition = Random.insideUnitCircle * dragPointSpawnRadius;
+            
+            int safetyCounter = 0;
+            int safetyCounterCount = 100;
+            bool tooClose = true;
+
+            while (tooClose && safetyCounter < safetyCounterCount)
+            {
+                Debug.Log("Too close, checking for closeness");
+                safetyCounter++;
+                tooClose = false;
+
+                foreach (DragPoint dragPoint in dragPointList)
+                {
+                    if (Vector3.Distance(dragPoint.transform.position, newPosition) < minDistanceBetweenDragPoints)
+                    {
+                        newPosition = Random.insideUnitCircle * dragPointSpawnRadius;
+                        tooClose = true;
+                        break;
+                    }
+                }
+
+                if (safetyCounter >= safetyCounterCount)
+                {
+                    Debug.LogWarning("Safety counter reached 100, breaking loop and not spawning new drag point");
+                    return;
+                }
+            }
+            
+            DragPoint newDragPoint = Instantiate(dragPointPrefab, dragPointParent);
+            newDragPoint.transform.position = newPosition;
+            dragPointList.Add(newDragPoint);
+
+            // newDragPoint.transform.position = newPosition;
+            //
+            // int safetyCounter = 0;
+            // while (newDragPoint.OverlappingDragPoint(newPosition) != null && safetyCounter < 100)
+            // {
+            //     Debug.Log("TOO CLOSE!");
+            //     
+            //     safetyCounter++;
+            //     newPosition = Random.insideUnitCircle * dragPointSpawnRadius;
+            //     newDragPoint.transform.position = newPosition;
+            // }
+
+        }
     }
 
 #endregion

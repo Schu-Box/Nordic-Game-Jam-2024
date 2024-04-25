@@ -105,7 +105,7 @@ public class InputManager : MonoBehaviour
 
     public void CancelDrag(DragPoint dragPoint)
     {
-        Debug.Log("cancel dat");
+        // Debug.Log("cancel dat");
         
         IsDraggingPoint = false;
         lastDragPoint = null;
