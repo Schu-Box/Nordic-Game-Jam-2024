@@ -32,15 +32,15 @@ public class TargetSpawner : MonoBehaviour
        }
         
         Vector2 centerPoint = Vector2.zero;
-
+        
         for (int i = 0; i < numTargets; i++)
         {
             var radians = 2 * Mathf.PI / numTargets * i;
-            var vertical = Mathf.Sin(radians);
-            var horizontal = Mathf.Cos(radians);
+            var vertical = -Mathf.Cos(radians);
+            var horizontal = Mathf.Sin(radians);
             var spawnDir = new Vector2(horizontal, vertical);
             var spawnPos = centerPoint + spawnDir * spawnRadius;
-
+            
             Target target = Instantiate(targetPrefab, spawnPos, Quaternion.identity, targetParent);
             var dir = centerPoint - spawnPos;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -48,5 +48,8 @@ public class TargetSpawner : MonoBehaviour
             
             target.transform.localScale = Vector3.one * Random.Range(scaleMinMaxOfTargets.x, scaleMinMaxOfTargets.y);
         }
+        
+        //Destroys the target at the bottom of the circle (so the laser enters unobstructed)
+        DestroyImmediate(targetParent.GetChild(0).gameObject);
     }
 }

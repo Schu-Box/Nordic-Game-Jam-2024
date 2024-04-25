@@ -6,7 +6,11 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
    public CircleCollider2D collie;
+   
    public MMF_Player destroyFeedback;
+   public MMF_Player restoreFeedback;
+
+   public Vector2 timeUntilRestorationRange = new Vector2(8f, 12f);
 
    private bool destroyed = false;
    public void Hit()
@@ -23,10 +27,25 @@ public class Target : MonoBehaviour
          collie.enabled = false;
       
          AudioManager.Instance.PlayEvent("event:/laser_hit");
+
+         StartCoroutine(RestoreCoroutine());
       }
       else //THIS WILL NEVER BE CALLED CUZ COLLIDER DISABLED
       {
          AudioManager.Instance.PlayEvent("event:/laser_static");
       }
+   }
+
+   public IEnumerator RestoreCoroutine()
+   {
+      float randomDelay = Random.Range(timeUntilRestorationRange.x, timeUntilRestorationRange.y);
+      yield return new WaitForSeconds(randomDelay);
+      
+      restoreFeedback.PlayFeedbacks();
+
+      yield return new WaitForSeconds(restoreFeedback.TotalDuration);
+
+      destroyed = false;
+      collie.enabled = true;
    }
 }

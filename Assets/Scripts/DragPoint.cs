@@ -170,7 +170,6 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             
             ParticleSystem.EmissionModule emissionModule = unstabilityParticles.emission;
             emissionModule.rateOverTime = Mathf.Lerp(unstabilityParticleEmissionRateRange.x, unstabilityParticleEmissionRateRange.y, step);
-            unstabilityParticles.Play();
             
             yield return null;
         }

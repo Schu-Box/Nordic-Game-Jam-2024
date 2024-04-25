@@ -90,7 +90,7 @@ public class GameController : MonoBehaviour
         savedName = PlayerPrefs.GetString("savedName");
         if (savedName != "")
         {
-            Debug.Log("Coming in from save");
+            // Debug.Log("Coming in from save");
             
             currentName = savedName;
 
@@ -100,7 +100,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            Debug.Log("was no save");
+            // Debug.Log("was no save");
 
             startUI.alpha = 0f;
             feedback_fadeInStartUI.PlayFeedbacks();
@@ -111,21 +111,31 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Debug mode enabled");
+        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
+        
+        ClearNonStartingDragPoints();
+        
+        ShowGame();
+    }
+
+    private void ClearNonStartingDragPoints()
+    {
+        Debug.Log("Generating new drag points");
         //Debug purposes
-        // LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
         
         //destroy all dragPoints
         for(int i = dragPointList.Count - 1; i >= 0; i--)
         {
             DragPoint dragPoint = dragPointList[i];
+            
+            if(dragPoint == starterGateLeft || dragPoint == starterGateRight)
+                continue;
+            
             Destroy(dragPoint.gameObject);
             dragPointList.Remove(dragPoint);
         }
         
         SpawnNewDragPoints();
-        
-        ShowGame();
     }
 
     public void ShowGameFromMainMenu()
@@ -172,10 +182,10 @@ public class GameController : MonoBehaviour
         List<DragPoint> stableDragPoints = new List<DragPoint>();
         foreach (DragPoint dragPoint in dragPointList)
         {
-            if (!dragPoint.IsUnstable)
-            {
-                stableDragPoints.Add(dragPoint);
-            }
+            if(dragPoint.IsUnstable || (!gameStarted && (dragPoint == starterGateLeft || dragPoint == starterGateRight)))
+                continue;
+
+            stableDragPoints.Add(dragPoint);
         }
         
         if (stableDragPoints.Count == 0)
@@ -220,7 +230,6 @@ public class GameController : MonoBehaviour
 
             while (tooClose && safetyCounter < safetyCounterCount)
             {
-                Debug.Log("Too close, checking for closeness");
                 safetyCounter++;
                 tooClose = false;
 
