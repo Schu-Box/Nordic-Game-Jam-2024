@@ -12,6 +12,12 @@ public class Target : MonoBehaviour
 
    public Vector2 timeUntilRestorationRange = new Vector2(8f, 12f);
 
+   public Vector2 restorationTimeIncreaseWhenRestored = new Vector2(4f, 6f);
+
+   public float timeAwardedWhenHit = 0.5f;
+
+   private int timesDestroyed = 0;
+
    private bool destroyed = false;
    public void Hit()
    {
@@ -19,6 +25,7 @@ public class Target : MonoBehaviour
       {
          // Debug.Log("HIT TARGET");
          destroyed = true;
+         timesDestroyed++;
          
          GameController.Instance.AddScore(1);
       
@@ -29,6 +36,8 @@ public class Target : MonoBehaviour
          AudioManager.Instance.PlayEvent("event:/laser_hit");
 
          StartCoroutine(RestoreCoroutine());
+         
+         GameController.Instance.AddTime(timeAwardedWhenHit);
       }
       else //THIS WILL NEVER BE CALLED CUZ COLLIDER DISABLED
       {
@@ -38,7 +47,7 @@ public class Target : MonoBehaviour
 
    public IEnumerator RestoreCoroutine()
    {
-      float randomDelay = Random.Range(timeUntilRestorationRange.x, timeUntilRestorationRange.y);
+      float randomDelay = Random.Range(timeUntilRestorationRange.x, timeUntilRestorationRange.y) + (Random.Range(restorationTimeIncreaseWhenRestored.x, restorationTimeIncreaseWhenRestored.y) * timesDestroyed);
       yield return new WaitForSeconds(randomDelay);
       
       restoreFeedback.PlayFeedbacks();

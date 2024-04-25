@@ -14,7 +14,7 @@ public class LeaderboardEntry : MonoBehaviour
 
         nameText.text = highScoreData.playerName;
 
-        scoreText.text = highScoreData.playerScore.ToString() + "%";
+        scoreText.text = highScoreData.playerScore.ToString();
 
         if (highScoreData.isMostRecent)
         {

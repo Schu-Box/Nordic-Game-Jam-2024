@@ -5035,6 +5035,7 @@ MonoBehaviour:
   destroyFeedback: {fileID: 6490653556788113328}
   restoreFeedback: {fileID: 4748955406757995496}
   timeUntilRestorationRange: {x: 8, y: 12}
+  timeAwardedWhenHit: 0.5
 --- !u!1 &7071547841989421208
 GameObject:
   m_ObjectHideFlags: 0

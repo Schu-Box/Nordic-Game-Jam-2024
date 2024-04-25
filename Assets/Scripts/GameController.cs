@@ -114,8 +114,9 @@ public class GameController : MonoBehaviour
         LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
         
         ClearNonStartingDragPoints();
+        SpawnNewDragPoints();
         
-        ShowGame();
+        // ShowGame();
     }
 
     private void ClearNonStartingDragPoints()
@@ -134,8 +135,6 @@ public class GameController : MonoBehaviour
             Destroy(dragPoint.gameObject);
             dragPointList.Remove(dragPoint);
         }
-        
-        SpawnNewDragPoints();
     }
 
     public void ShowGameFromMainMenu()
@@ -253,20 +252,14 @@ public class GameController : MonoBehaviour
             DragPoint newDragPoint = Instantiate(dragPointPrefab, dragPointParent);
             newDragPoint.transform.position = newPosition;
             dragPointList.Add(newDragPoint);
-
-            // newDragPoint.transform.position = newPosition;
-            //
-            // int safetyCounter = 0;
-            // while (newDragPoint.OverlappingDragPoint(newPosition) != null && safetyCounter < 100)
-            // {
-            //     Debug.Log("TOO CLOSE!");
-            //     
-            //     safetyCounter++;
-            //     newPosition = Random.insideUnitCircle * dragPointSpawnRadius;
-            //     newDragPoint.transform.position = newPosition;
-            // }
-
         }
+    }
+
+    public void AddTime(float time)
+    {
+        timer += time;
+        
+        timerText.text = timer.ToString("F1");
     }
 
 #endregion
@@ -337,7 +330,7 @@ public class GameController : MonoBehaviour
     public void AddScore(int points)
     {
         score += points;
-        scoreText.text = score + "%";
+        scoreText.text = score.ToString();
     }
 
     public void GameOver()
