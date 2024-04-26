@@ -64,7 +64,7 @@ public class LineManager : MonoBehaviour
 
    public void BreakLine(Line line, Vector2 breakPoint)
    {
-      Debug.Log("Breaking line : " + line.gameObject.name);
+      // Debug.Log("Breaking line : " + line.gameObject.name);
       
       if (line.isStartingGate)
       {

@@ -106,8 +106,8 @@ public class LaserSpawner : MonoBehaviour
         }
     }
 
-    public void TurnOff()
+    public void SetActive(bool isActive)
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(isActive);
     }
 }

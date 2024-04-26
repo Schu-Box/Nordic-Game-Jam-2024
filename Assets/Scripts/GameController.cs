@@ -76,6 +76,8 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
+        laserSpawner.SetActive(false);
+        
         blackBackground.SetActive(true);
         
         Instance = this;
@@ -107,13 +109,8 @@ public class GameController : MonoBehaviour
         }
         
         PlayerPrefs.SetString("savedName", "");
-    }
-
-    private void Start()
-    {
         
-        
-        // ShowGame();
+        scoreText.text = score.ToString();
     }
 
     private void ClearNonStartingDragPoints()
@@ -167,14 +164,13 @@ public class GameController : MonoBehaviour
         
         LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
         
+        laserSpawner.SetActive(true);
+
         ClearNonStartingDragPoints();
         SpawnNewDragPoints();
         
-        Debug.Log("Check dis");
         for(int i = 0; i < numUnstableDragPoints; i++)
         {
-            Debug.Log("check DAT");
-            
             TriggerNewUnstableDragPoint();
         }
     }
@@ -183,7 +179,7 @@ public class GameController : MonoBehaviour
 
     public void TriggerNewUnstableDragPoint()
     {
-        Debug.Log("New unstable");
+        // Debug.Log("New unstable");
         
         List<DragPoint> stableDragPoints = new List<DragPoint>();
         foreach (DragPoint dragPoint in dragPointList)
@@ -362,7 +358,7 @@ public class GameController : MonoBehaviour
 
         endLeaderboard.FinalizeScore();
 
-        laserSpawner.TurnOff();
+        laserSpawner.SetActive(false);
         
         HideGame();
         
