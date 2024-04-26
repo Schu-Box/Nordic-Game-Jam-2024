@@ -7,8 +7,12 @@ using UnityEngine.EventSystems;
 public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public Collider2D collie;
+
+    public MMWiggle wiggle;
     
     [Header("Feedbacks")]
+    public MMF_Player spawnFeedback;
+    
     public MMF_Player selectFeedback;
     public MMF_Player deselectFeedback;
     public MMF_Player hoverFeedback;
@@ -17,7 +21,6 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public MMF_Player unstableFeedback;
     public MMF_Player destroyFeedback;
 
-    public MMWiggle wiggle;
 
     private float timerBeforeMovement;
     private Coroutine movementCoroutine;
@@ -28,6 +31,8 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     private void Start()
     {
         // wiggle.enabled = false;
+        transform.localScale = Vector3.zero;
+        spawnFeedback.PlayFeedbacks();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -174,7 +179,15 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             yield return null;
         }
         
-        destroyFeedback.PlayFeedbacks();
         GameController.Instance.RemoveDragPoint(this);
+        
+        GameController.Instance.TriggerNewUnstableDragPoint();
+        GameController.Instance.SpawnNewDragPoints();
+    }
+
+    public void SelfDestruct()
+    {
+       wiggle.enabled = false;
+       destroyFeedback.PlayFeedbacks();
     }
 }

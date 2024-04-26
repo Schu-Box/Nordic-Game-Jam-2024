@@ -111,10 +111,7 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
         
-        ClearNonStartingDragPoints();
-        SpawnNewDragPoints();
         
         // ShowGame();
     }
@@ -132,8 +129,7 @@ public class GameController : MonoBehaviour
             if(dragPoint == starterGateLeft || dragPoint == starterGateRight)
                 continue;
             
-            Destroy(dragPoint.gameObject);
-            dragPointList.Remove(dragPoint);
+            RemoveDragPoint(dragPoint);
         }
     }
 
@@ -155,29 +151,40 @@ public class GameController : MonoBehaviour
         gameShown = true;
         // startUI.SetActive(false);
         playerNameText.text = currentName;
-
+        
         blackBackground.SetActive(false);
-
+        
         startUI.interactable = false;
         startUI.blocksRaycasts = false;
         feedback_fadeOutStartUI.PlayFeedbacks();
 
-        AudioManager.Instance.PlayEvent("event:/start_transition");
-
         screenFillSpawner.Spawn();
         
         screenFillSpawner.HideAllScreenFillers();
-
+        
+        AudioManager.Instance.PlayEvent("event:/start_transition");
+        
+        
+        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
+        
+        ClearNonStartingDragPoints();
+        SpawnNewDragPoints();
+        
+        Debug.Log("Check dis");
         for(int i = 0; i < numUnstableDragPoints; i++)
         {
+            Debug.Log("check DAT");
+            
             TriggerNewUnstableDragPoint();
         }
     }
     
 #region Arcade Gameplay
 
-    private void TriggerNewUnstableDragPoint()
+    public void TriggerNewUnstableDragPoint()
     {
+        Debug.Log("New unstable");
+        
         List<DragPoint> stableDragPoints = new List<DragPoint>();
         foreach (DragPoint dragPoint in dragPointList)
         {
@@ -199,6 +206,8 @@ public class GameController : MonoBehaviour
 
     public void RemoveDragPoint(DragPoint dragPoint)
     {
+        dragPoint.SelfDestruct();
+        
         dragPointList.Remove(dragPoint);
 
         if (InputManager.Instance.IsDraggingPoint && InputManager.Instance.lastDragPoint == dragPoint)
@@ -209,10 +218,6 @@ public class GameController : MonoBehaviour
         }
         
         LineManager.Instance.BreakAllLinesConnectedToDragPoint(dragPoint);
-
-        TriggerNewUnstableDragPoint();
-
-        SpawnNewDragPoints();
     }
 
     public void SpawnNewDragPoints()
@@ -297,6 +302,23 @@ public class GameController : MonoBehaviour
             SceneManager.LoadScene(0);
         }
         
+        if(Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ClearNonStartingDragPoints();
+        } 
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SpawnNewDragPoints();
+        } 
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            TriggerNewUnstableDragPoint();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            CreateAllLines();
+        }
+
         if (!gameStarted || gameOver)
             return;
         
@@ -371,5 +393,17 @@ public class GameController : MonoBehaviour
         endUI.blocksRaycasts = false;
         
         feedback_fadeOutEndUI.PlayFeedbacks(); //Actual restart is called by the end of this feedback
+    }
+
+    private void CreateAllLines()
+    {
+        foreach (DragPoint dragPoint in dragPointList)
+        {
+            foreach (DragPoint otherDragPoint in dragPointList)
+            {
+                if(dragPoint != otherDragPoint)
+                    LineManager.Instance.CreateLineBetweenDragPoints(dragPoint, otherDragPoint);
+            }
+        }
     }
 }
