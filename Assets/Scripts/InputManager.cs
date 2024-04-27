@@ -38,8 +38,8 @@ public class InputManager : MonoBehaviour
         
         if (!GameController.Instance.CanInteract())
             return;
-        
-        if (Input.GetMouseButtonDown(0) && !IsDraggingPoint)
+
+        if ((Input.GetMouseButtonDown(0) && !IsDraggingPoint) || Input.GetMouseButtonDown(1))
         {
             Vector2 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
@@ -54,7 +54,7 @@ public class InputManager : MonoBehaviour
         {
             ShowLineCancellation(startDragCancellationPosition, Camera.main.ScreenToWorldPoint(Input.mousePosition));
             
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1))
             {
                 AttemptCancellation();
                 

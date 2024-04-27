@@ -43,6 +43,15 @@ public class LineManager : MonoBehaviour
             return false;
          }
       }
+      
+      RaycastHit2D[] hits = Physics2D.LinecastAll(origin.transform.position, destination.transform.position);
+      foreach (RaycastHit2D hit in hits)
+      {
+         if (hit.collider.gameObject.GetComponent<Target>())
+         {
+            return false;
+         }
+      }
 
       return true;
    }

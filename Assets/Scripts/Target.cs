@@ -19,6 +19,12 @@ public class Target : MonoBehaviour
    private int timesDestroyed = 0;
 
    private bool destroyed = false;
+   
+   private void Start()
+   {
+      GameController.Instance.targetList.Add(this);
+   }
+   
    public void Hit()
    {
       if (!destroyed)
@@ -31,7 +37,7 @@ public class Target : MonoBehaviour
       
          destroyFeedback?.PlayFeedbacks();
 
-         collie.enabled = false;
+         // collie.enabled = false;
       
          AudioManager.Instance.PlayEvent("event:/laser_hit");
 
@@ -55,6 +61,6 @@ public class Target : MonoBehaviour
       yield return new WaitForSeconds(restoreFeedback.TotalDuration);
 
       destroyed = false;
-      collie.enabled = true;
+      // collie.enabled = true;
    }
 }

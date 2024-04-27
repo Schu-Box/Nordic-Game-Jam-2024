@@ -32,7 +32,7 @@ public class LaserSpawner : MonoBehaviour
 
     public void ShootLaser()
     {
-        // Debug.Log("Shooting laser");
+        Debug.Log("Shooting laser");
 
         ResetMostRecentlyHitObject();
 
@@ -47,18 +47,35 @@ public class LaserSpawner : MonoBehaviour
         }
 
         float remainingLength = maxLaserLength;
+        
+        //TODO: If the laser hits a target, stop raycasting at that point
 
+        bool hitTarget = false;
         for (int i = 0; i < maxNumReflections; i++)
         {
             RaycastHit2D hit = Physics2D.Raycast(raycastOrigin, raycastDirection, remainingLength, layerMask);
-            if (hit)
+            if (hit && !hitTarget)
             {
                 // Debug.Log("HIT " + hit.collider.name);
 
                 Target target = hit.collider.gameObject.GetComponent<Target>();
                 if (target != null)
                 {
+                    hitTarget = true;
+
+                    remainingLength = 0f;
+                    
                     target.Hit();
+                    
+                    //end lineRenderer at hit point
+                    foreach (LineRenderer lineRenderer in laserLineRendererList)
+                    {
+                        lineRenderer.positionCount += 1;
+                        lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
+                    }
+
+                    Debug.Log("hit target");
+
                     break;
                 }
 
@@ -81,6 +98,8 @@ public class LaserSpawner : MonoBehaviour
                 // raycastOrigin = hit.collider.ClosestPoint(raycastDirection);
                 raycastOrigin = hit.point;
                 raycastDirection = Vector2.Reflect(raycastDirection, hit.normal);
+
+                Debug.Log("still raycasting");
             }
             else
             {

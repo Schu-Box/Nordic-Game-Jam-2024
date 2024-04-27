@@ -38,6 +38,7 @@ public class Line : MonoBehaviour
         dragPointDestination = destination;
         
         lineRenderer.gameObject.layer = LayerMask.NameToLayer("Mirrors");
+        lineRenderer.sortingLayerName = "Mirrors";
         
         edgeCollider = gameObject.AddComponent<EdgeCollider2D>();
         edgeCollider.points = new Vector2[] { dragPointOrigin.transform.position, dragPointDestination.transform.position };

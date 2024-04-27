@@ -47,6 +47,9 @@ public class GameController : MonoBehaviour
     public float dragPointSpawnRadius;
     public Vector2Int dragPointCountRange;
     public float minDistanceBetweenDragPoints = 1f;
+    
+    [Header("Targets")]
+    public List<Target> targetList = new List<Target>();
 
     [Header("Variables")]
     public float timeLimit = 60f;
@@ -236,6 +239,16 @@ public class GameController : MonoBehaviour
                 foreach (DragPoint dragPoint in dragPointList)
                 {
                     if (Vector3.Distance(dragPoint.transform.position, newPosition) < minDistanceBetweenDragPoints)
+                    {
+                        newPosition = Random.insideUnitCircle * dragPointSpawnRadius;
+                        tooClose = true;
+                        break;
+                    }
+                }
+
+                foreach (Target target in targetList)
+                {
+                    if (Vector3.Distance(target.transform.position, newPosition) < minDistanceBetweenDragPoints)
                     {
                         newPosition = Random.insideUnitCircle * dragPointSpawnRadius;
                         tooClose = true;

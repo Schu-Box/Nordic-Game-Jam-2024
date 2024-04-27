@@ -11,6 +11,9 @@ public class TargetSpawner : MonoBehaviour
     public int numTargets = 100;
     public float spawnRadius = 4.5f;
 
+    public bool uteslutaBottomTarget = true;
+    public bool inverseRotation = false;
+        
     public Vector2 scaleMinMaxOfTargets = new Vector2(1f, 1f);
 
     public bool spawnNewTargets = false;
@@ -46,10 +49,15 @@ public class TargetSpawner : MonoBehaviour
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
             target.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             
+            if (inverseRotation)
+            {
+                target.transform.Rotate(Vector3.forward, 180f);
+            }
+            
             target.transform.localScale = Vector3.one * Random.Range(scaleMinMaxOfTargets.x, scaleMinMaxOfTargets.y);
         }
         
-        //Destroys the target at the bottom of the circle (so the laser enters unobstructed)
-        DestroyImmediate(targetParent.GetChild(0).gameObject);
+        if(uteslutaBottomTarget) //Destroys the target at the bottom of the circle (so the laser enters unobstructed)
+            DestroyImmediate(targetParent.GetChild(0).gameObject);
     }
 }

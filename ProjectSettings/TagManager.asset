@@ -48,6 +48,9 @@ TagManager:
   - name: Laser
     uniqueID: 1918450023
     locked: 0
+  - name: Mirrors
+    uniqueID: 4058166387
+    locked: 0
   - name: OuterRing
     uniqueID: 2016559633
     locked: 0
