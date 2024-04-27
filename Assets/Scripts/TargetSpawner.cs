@@ -18,6 +18,11 @@ public class TargetSpawner : MonoBehaviour
 
     public bool spawnNewTargets = false;
 
+    private void Start()
+    {
+        SpawnTargets();
+    }
+    
     private void Update()
     {
         if (spawnNewTargets)
