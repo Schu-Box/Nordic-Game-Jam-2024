@@ -24,6 +24,12 @@ public class Target : MonoBehaviour
    {
       GameController.Instance.targetList.Add(this);
    }
+
+   private void OnDestroy()
+   {
+      if(GameController.Instance.targetList.Contains(this))
+         GameController.Instance.targetList.Remove(this);
+   }
    
    public void Hit()
    {
