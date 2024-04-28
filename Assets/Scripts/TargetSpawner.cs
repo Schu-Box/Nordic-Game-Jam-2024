@@ -15,8 +15,8 @@ public class TargetSpawner : MonoBehaviour
     public bool inverseRotation = false;
         
     public Vector2 scaleMinMaxOfTargets = new Vector2(1f, 1f);
-
-    public bool spawnNewTargets = false;
+    
+    // public bool spawnNewTargets = false;
 
     private void Start()
     {
@@ -25,19 +25,17 @@ public class TargetSpawner : MonoBehaviour
     
     private void Update()
     {
-        if (spawnNewTargets)
-        {
-            SpawnTargets();
-            spawnNewTargets = false;
-        }
+        // if (spawnNewTargets)
+        // {
+        //     SpawnTargets();
+        //     spawnNewTargets = false;
+        // }
     }
-
+    
+    [Sirenix.OdinInspector.Button]
     public void SpawnTargets()
     {
-       for (int i = targetParent.childCount - 1; i >= 0; i--)
-       {
-           DestroyImmediate(targetParent.GetChild(i).gameObject);
-       }
+        DestroyTargets();
         
         Vector2 centerPoint = Vector2.zero;
         
@@ -64,5 +62,14 @@ public class TargetSpawner : MonoBehaviour
         
         if(uteslutaBottomTarget) //Destroys the target at the bottom of the circle (so the laser enters unobstructed)
             DestroyImmediate(targetParent.GetChild(0).gameObject);
+    }
+    
+    [Sirenix.OdinInspector.Button, Tooltip("If main scene too large, delete all targets from each targetSpawner in the scene.")]
+    public void DestroyTargets()
+    {
+        for (int i = targetParent.childCount - 1; i >= 0; i--)
+        {
+            DestroyImmediate(targetParent.GetChild(i).gameObject);
+        }
     }
 }
