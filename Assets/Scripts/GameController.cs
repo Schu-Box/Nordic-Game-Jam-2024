@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Feedbacks;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
-public class GameController : MonoBehaviour
+public class GameController : SerializedMonoBehaviour
 {
     public static GameController Instance;
 
@@ -15,31 +18,30 @@ public class GameController : MonoBehaviour
     public MMF_Player feedback_fadeInStartUI;
     public MMF_Player feedback_fadeOutStartUI;
 
-    [Header("End UI")]
-    public CanvasGroup endUI;
-    public MMF_Player feedback_fadeInEndUI;
-    public MMF_Player feedback_fadeOutEndUI;
+    [Header("Map Select UI")]
+    public CanvasGroup mapSelectUI;
+    public MMF_Player feedback_fadeInMapSelectUI;
+    public MMF_Player feedback_fadeOutMapSelectUI;
 
-    public Leaderboard endLeaderboard;
-
-    [Header("Errythang else")]
-    public MMF_Player feedback_breakStartingGate;
-    
+    [Header("Gameplay UI")]
+    public Leaderboard gameplayLeaderboard;
     public TextMeshProUGUI playerNameText;
-    
-    public LaserSpawner laserSpawner;
-    
-    public DragPoint starterGateLeft;
-    public DragPoint starterGateRight;
     
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI scoreText;
 
     public MMF_Player feedback_lowTime;
     
+    [Header("Gameplay")]
+    [SerializeField] public Dictionary<MapType, GameObject> mapDictionary = new Dictionary<MapType, GameObject>();
+    
     public ScreenFillSpawner screenFillSpawner;
 
-    [Header("Gameplay")]
+    public LaserSpawner laserSpawner;
+    public DragPoint starterGateLeft;
+    public DragPoint starterGateRight;
+    public MMF_Player feedback_breakStartingGate;
+
     public Transform dragPointParent;
     public DragPoint dragPointPrefab;
     public List<DragPoint> dragPointList = new List<DragPoint>();
@@ -48,8 +50,14 @@ public class GameController : MonoBehaviour
     public Vector2Int dragPointCountRange;
     public float minDistanceBetweenDragPoints = 1f;
     
-    [Header("Targets")]
     public List<Target> targetList = new List<Target>();
+    
+    [Header("End UI")]
+    public CanvasGroup endUI;
+    public MMF_Player feedback_fadeInEndUI;
+    public MMF_Player feedback_fadeOutEndUI;
+
+    public Leaderboard endLeaderboard;
 
     [Header("Variables")]
     public float timeLimit = 60f;
@@ -76,6 +84,8 @@ public class GameController : MonoBehaviour
     private string savedName = "";
     
     public string currentName = "";
+    public MapType currentMap = MapType.Circle;
+    public ModeType currentMode = ModeType.Timed;
 
     private void Awake()
     {
@@ -92,12 +102,20 @@ public class GameController : MonoBehaviour
         timer = timeLimit;
         timerText.text = timer.ToString("F1");
         
+        mapSelectUI.alpha = 0f;
+        mapSelectUI.interactable = false;
+        mapSelectUI.blocksRaycasts = false;
+        
         savedName = PlayerPrefs.GetString("savedName");
+       
+        
         if (savedName != "")
         {
             // Debug.Log("Coming in from save");
             
             currentName = savedName;
+            currentMap = (MapType)Enum.Parse(typeof(MapType), PlayerPrefs.GetString("savedMap"));
+            currentMode = (ModeType)Enum.Parse(typeof(ModeType), PlayerPrefs.GetString("savedMode"));
 
             startUI.gameObject.SetActive(false);
             
@@ -116,6 +134,90 @@ public class GameController : MonoBehaviour
         scoreText.text = score.ToString();
     }
 
+    public void ShowGameFromMainMenu()
+    {
+        InputNewName();
+        // ShowGame();
+        ShowMapSelect();
+        
+        AudioManager.Instance.PlayEvent("event:/start_button_press");
+    }
+
+    private void InputNewName()
+    {
+        currentName = nameInputField.text;
+    }
+    
+    public void ShowMapSelect()
+    {
+        feedback_fadeInMapSelectUI.PlayFeedbacks();
+        mapSelectUI.interactable = true;
+        mapSelectUI.blocksRaycasts = true;
+        
+        feedback_fadeOutStartUI.PlayFeedbacks();
+        startUI.interactable = false;
+        startUI.blocksRaycasts = false;
+    }
+
+    public void SelectMode(ModeType modeType)
+    {
+        currentMode = modeType;
+        
+        //TODO: Change UI
+    }
+    
+    public void SelectMap(MapType mapType)
+    {
+        Debug.Log("Selected map: " + mapType.ToString());
+        
+        currentMap = mapType;
+
+        feedback_fadeOutMapSelectUI.PlayFeedbacks();
+        mapSelectUI.interactable = false;
+        mapSelectUI.blocksRaycasts = false;
+
+        ShowGame();
+    }
+
+    public void ShowGame()
+    {
+        foreach(GameObject map in mapDictionary.Values)
+        {
+            map.SetActive(false);
+        }
+        mapDictionary[currentMap].SetActive(true);
+        
+        gameShown = true;
+        playerNameText.text = currentName;
+        
+        blackBackground.SetActive(false);
+        
+        // startUI.interactable = false;
+        // startUI.blocksRaycasts = false;
+        // feedback_fadeOutStartUI.PlayFeedbacks();
+
+        screenFillSpawner.Spawn();
+        
+        screenFillSpawner.HideAllScreenFillers();
+        
+        AudioManager.Instance.PlayEvent("event:/start_transition");
+        
+        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
+        
+        laserSpawner.SetActive(true);
+
+        gameplayLeaderboard.SetMapAndMode(currentMap, currentMode);
+        endLeaderboard.SetMapAndMode(currentMap, currentMode);
+
+        ClearNonStartingDragPoints();
+        SpawnNewDragPoints();
+        
+        for(int i = 0; i < numUnstableDragPoints; i++)
+        {
+            TriggerNewUnstableDragPoint();
+        }
+    }
+    
     private void ClearNonStartingDragPoints()
     {
         Debug.Log("Generating new drag points");
@@ -130,51 +232,6 @@ public class GameController : MonoBehaviour
                 continue;
             
             RemoveDragPoint(dragPoint);
-        }
-    }
-
-    public void ShowGameFromMainMenu()
-    {
-        InputNewName();
-        ShowGame();
-        
-        AudioManager.Instance.PlayEvent("event:/start_button_press");
-    }
-
-    private void InputNewName()
-    {
-        currentName = nameInputField.text;
-    }
-
-    public void ShowGame()
-    {
-        gameShown = true;
-        // startUI.SetActive(false);
-        playerNameText.text = currentName;
-        
-        blackBackground.SetActive(false);
-        
-        startUI.interactable = false;
-        startUI.blocksRaycasts = false;
-        feedback_fadeOutStartUI.PlayFeedbacks();
-
-        screenFillSpawner.Spawn();
-        
-        screenFillSpawner.HideAllScreenFillers();
-        
-        AudioManager.Instance.PlayEvent("event:/start_transition");
-        
-        
-        LineManager.Instance.CreateLineBetweenDragPoints(starterGateLeft, starterGateRight, true);
-        
-        laserSpawner.SetActive(true);
-
-        ClearNonStartingDragPoints();
-        SpawnNewDragPoints();
-        
-        for(int i = 0; i < numUnstableDragPoints; i++)
-        {
-            TriggerNewUnstableDragPoint();
         }
     }
     
@@ -384,6 +441,8 @@ public class GameController : MonoBehaviour
     public void Retry()
     {
         PlayerPrefs.SetString("savedName", currentName);
+        PlayerPrefs.SetString("savedMap", currentMap.ToString());
+        PlayerPrefs.SetString("savedMode", currentMode.ToString());
         
         RestartScene();
     }
