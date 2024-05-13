@@ -22,6 +22,8 @@ public class GameController : SerializedMonoBehaviour
     public CanvasGroup mapSelectUI;
     public MMF_Player feedback_fadeInMapSelectUI;
     public MMF_Player feedback_fadeOutMapSelectUI;
+    
+    public List<ModeSelectButton> modeSelectButtonList;
 
     [Header("Gameplay UI")]
     public Leaderboard gameplayLeaderboard;
@@ -60,7 +62,7 @@ public class GameController : SerializedMonoBehaviour
     public Leaderboard endLeaderboard;
 
     [Header("Variables")]
-    public float timeLimit = 60f;
+    public float endlessModeStartingTimeLimit = 45f;
 
     public int numUnstableDragPoints = 2;
     
@@ -99,7 +101,7 @@ public class GameController : SerializedMonoBehaviour
         endUI.interactable = false;
         endUI.blocksRaycasts = false;
         
-        timer = timeLimit;
+        timer = endlessModeStartingTimeLimit;
         timerText.text = timer.ToString("F1");
         
         mapSelectUI.alpha = 0f;
@@ -157,13 +159,23 @@ public class GameController : SerializedMonoBehaviour
         feedback_fadeOutStartUI.PlayFeedbacks();
         startUI.interactable = false;
         startUI.blocksRaycasts = false;
+
+        modeSelectButtonList[0].SelectMode();
     }
 
     public void SelectMode(ModeType modeType)
     {
         currentMode = modeType;
         
-        //TODO: Change UI
+        switch (modeType)
+        {
+            case ModeType.Timed:
+                timer = 0;
+                break;
+            case ModeType.Endless:
+                timer = endlessModeStartingTimeLimit;
+                break;
+        }
     }
     
     public void SelectMap(MapType mapType)
@@ -387,30 +399,38 @@ public class GameController : SerializedMonoBehaviour
 
         if (!gameStarted || gameOver)
             return;
-        
-        timer -= Time.deltaTime;
-        timerText.text = timer.ToString("F1");
-        
-        if(timer <= 0)
-        {
-            timer = 0;
-            GameOver();
-            
-            AudioManager.Instance.PlayEvent("event:/timer_final");
 
-            return;
-        }
-        
-        if(timer <= timeRemainingWhenBeepsStart)
+        if (currentMode == ModeType.Timed)
         {
-            timeUntilBeepTimer -= Time.deltaTime;
-            if(timeUntilBeepTimer <= 0)
+            timer += Time.deltaTime;
+            timerText.text = timer.ToString("F1");
+        } 
+        else if (currentMode == ModeType.Endless)
+        {
+            timer -= Time.deltaTime;
+            timerText.text = timer.ToString("F1");
+        
+            if(timer <= 0)
             {
-                feedback_lowTime.PlayFeedbacks();
+                timer = 0;
+                GameOver();
+            
+                AudioManager.Instance.PlayEvent("event:/timer_final");
+
+                return;
+            }
+            
+            if(timer <= timeRemainingWhenBeepsStart)
+            {
+                timeUntilBeepTimer -= Time.deltaTime;
+                if(timeUntilBeepTimer <= 0)
+                {
+                    feedback_lowTime.PlayFeedbacks();
                 
-                timeUntilBeepTimer = timeBetweenBeeps;
+                    timeUntilBeepTimer = timeBetweenBeeps;
                 
-                AudioManager.Instance.PlayEvent("event:/timer_beep");
+                    AudioManager.Instance.PlayEvent("event:/timer_beep");
+                }
             }
         }
     }
@@ -421,12 +441,27 @@ public class GameController : SerializedMonoBehaviour
         scoreText.text = score.ToString();
     }
 
+    public void CheckIfAllTargetsHit()
+    {
+        foreach(Target target in targetList)
+        {
+            if (!target.destroyed)
+                return;
+        }
+        
+        GameOver();
+    }
+
     public void GameOver()
     {
         // GameOverUI.SetActive(true);
         gameOver = true;
 
+        
+        
         endLeaderboard.FinalizeScore();
+        
+        //TODO: If timed mode, show time as score
 
         laserSpawner.SetActive(false);
         

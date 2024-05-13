@@ -18,7 +18,7 @@ public class Target : MonoBehaviour
 
    private int timesDestroyed = 0;
 
-   private bool destroyed = false;
+   public bool destroyed = false;
    
    private void Start()
    {
@@ -47,9 +47,16 @@ public class Target : MonoBehaviour
       
          AudioManager.Instance.PlayEvent("event:/laser_hit");
 
-         StartCoroutine(RestoreCoroutine());
+         if (GameController.Instance.currentMode == ModeType.Endless) //If it's endless, add time and restore the target over time
+         {
+            StartCoroutine(RestoreCoroutine());
          
-         GameController.Instance.AddTime(timeAwardedWhenHit);
+            GameController.Instance.AddTime(timeAwardedWhenHit);
+         } 
+         else if (GameController.Instance.currentMode == ModeType.Timed) //If it's timed, just add time
+         {
+            GameController.Instance.CheckIfAllTargetsHit();
+         }
       }
       else //THIS WILL NEVER BE CALLED CUZ COLLIDER DISABLED
       {

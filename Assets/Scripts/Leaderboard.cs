@@ -48,6 +48,8 @@ public class Leaderboard : MonoBehaviour
     
     public void FinalizeScore()
     {
+        //TODO: Restructure leaderboard data so it makes sense
+        
         List<HighScoreData> topScores = LoadTopXScores(numScoresOnLeaderboard - 1);
 
         HighScoreData currentData = new HighScoreData
