@@ -187,7 +187,12 @@ public class DragPoint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void SelfDestruct()
     {
-       wiggle.enabled = false;
-       destroyFeedback.PlayFeedbacks();
+        if (GameController.Instance.startingExcitedDragPoint == this)
+        {
+            GameController.Instance.feedback_excitedDragPointDestroyed.PlayFeedbacks();
+        }
+        
+        wiggle.enabled = false; 
+        destroyFeedback.PlayFeedbacks();
     }
 }

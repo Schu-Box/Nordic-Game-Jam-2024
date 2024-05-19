@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
+// [ExecuteInEditMode]
 public class TargetSpawner : MonoBehaviour
 {
     public Transform targetParent;
@@ -21,6 +21,11 @@ public class TargetSpawner : MonoBehaviour
     private void Start()
     {
         SpawnTargets();
+    }
+
+    private void OnDestroy()
+    {
+        DestroyTargets();
     }
     
     private void Update()

@@ -66,3 +66,6 @@ TagManager:
   - name: UI StartScreen
     uniqueID: 4174497183
     locked: 0
+  - name: Overlay Filter
+    uniqueID: 3355404215
+    locked: 0

@@ -44,6 +44,9 @@ public class GameController : SerializedMonoBehaviour
     public DragPoint starterGateRight;
     public MMF_Player feedback_breakStartingGate;
 
+    public DragPoint startingExcitedDragPoint;
+    public MMF_Player feedback_excitedDragPointDestroyed;
+
     public Transform dragPointParent;
     public DragPoint dragPointPrefab;
     public List<DragPoint> dragPointList = new List<DragPoint>();
@@ -224,7 +227,8 @@ public class GameController : SerializedMonoBehaviour
         ClearNonStartingDragPoints();
         SpawnNewDragPoints();
         
-        for(int i = 0; i < numUnstableDragPoints; i++)
+        TriggerNewUnstableDragPoint(startingExcitedDragPoint);
+        for(int i = 1; i < numUnstableDragPoints; i++)
         {
             TriggerNewUnstableDragPoint();
         }
@@ -232,15 +236,14 @@ public class GameController : SerializedMonoBehaviour
     
     private void ClearNonStartingDragPoints()
     {
-        Debug.Log("Generating new drag points");
-        //Debug purposes
+        // Debug.Log("Generating new drag points");
         
         //destroy all dragPoints
         for(int i = dragPointList.Count - 1; i >= 0; i--)
         {
             DragPoint dragPoint = dragPointList[i];
-            
-            if(dragPoint == starterGateLeft || dragPoint == starterGateRight)
+
+            if (dragPoint == starterGateLeft || dragPoint == starterGateRight || dragPoint == startingExcitedDragPoint)
                 continue;
             
             RemoveDragPoint(dragPoint);
@@ -249,9 +252,15 @@ public class GameController : SerializedMonoBehaviour
     
 #region Arcade Gameplay
 
-    public void TriggerNewUnstableDragPoint()
+    public void TriggerNewUnstableDragPoint(DragPoint forcedDragPoint = null)
     {
         // Debug.Log("New unstable");
+        
+        if(forcedDragPoint != null)
+        {
+            forcedDragPoint.TriggerUnstability();
+            return;
+        }
         
         List<DragPoint> stableDragPoints = new List<DragPoint>();
         foreach (DragPoint dragPoint in dragPointList)
