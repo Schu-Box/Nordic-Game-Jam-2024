@@ -115,7 +115,7 @@ public class Leaderboard : MonoBehaviour
     {
         List<HighScoreData> topScoreData = new();
         
-        Debug.Log("Loading top " + numScores + " scores.");
+        // Debug.Log("Loading top " + numScores + " scores.");
         
         for (int i = 0; i < numScores; i++)
         {
@@ -127,7 +127,7 @@ public class Leaderboard : MonoBehaviour
 
             if (!PlayerPrefs.HasKey(playerNameKey))
             {
-                Debug.Log("No key found for " + playerNameKey + ". Skipping.");
+                // Debug.Log("No key found for " + playerNameKey + ". Skipping.");
                 continue;
             }
 
@@ -138,7 +138,7 @@ public class Leaderboard : MonoBehaviour
 
             if (mapType != highScoreData.map || modeType != highScoreData.mode)
             {
-                Debug.Log("Skipping score because it is for a different map or mode.");
+                // Debug.Log("Skipping score because it is for a different map or mode.");
                 continue;
             }
 
@@ -155,7 +155,7 @@ public class Leaderboard : MonoBehaviour
 
     public void ShowLeaderboard(List<HighScoreData> topScores)
     {
-        Debug.Log("Showing leaderboard with num scores: " + topScores.Count);
+        // Debug.Log("Showing leaderboard with num scores: " + topScores.Count);
         
         //destroy all children of leaderboardEntryParent
         foreach (Transform child in leaderboardEntryParent)

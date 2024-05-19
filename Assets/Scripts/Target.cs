@@ -53,7 +53,7 @@ public class Target : MonoBehaviour
          
             GameController.Instance.AddTime(timeAwardedWhenHit);
          } 
-         else if (GameController.Instance.currentMode == ModeType.Timed) //If it's timed, just add time
+         else if (GameController.Instance.currentMode == ModeType.Timed) //If it's timed, just check if all targets have been hit
          {
             GameController.Instance.CheckIfAllTargetsHit();
          }

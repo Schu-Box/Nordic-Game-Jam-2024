@@ -14,29 +14,32 @@ public class GameController : SerializedMonoBehaviour
 
     [Header("Start UI")]
     public GameObject blackBackground;
+
     public CanvasGroup startUI;
     public MMF_Player feedback_fadeInStartUI;
     public MMF_Player feedback_fadeOutStartUI;
 
     [Header("Map Select UI")]
     public CanvasGroup mapSelectUI;
+
     public MMF_Player feedback_fadeInMapSelectUI;
     public MMF_Player feedback_fadeOutMapSelectUI;
-    
+
     public List<ModeSelectButton> modeSelectButtonList;
 
     [Header("Gameplay UI")]
     public Leaderboard gameplayLeaderboard;
+
     public TextMeshProUGUI playerNameText;
-    
+
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI scoreText;
 
     public MMF_Player feedback_lowTime;
-    
+
     [Header("Gameplay")]
     [SerializeField] public Dictionary<MapType, GameObject> mapDictionary = new Dictionary<MapType, GameObject>();
-    
+
     public ScreenFillSpawner screenFillSpawner;
 
     public LaserSpawner laserSpawner;
@@ -50,44 +53,48 @@ public class GameController : SerializedMonoBehaviour
     public Transform dragPointParent;
     public DragPoint dragPointPrefab;
     public List<DragPoint> dragPointList = new List<DragPoint>();
-    
+
     public float dragPointSpawnRadius;
     public Vector2Int dragPointCountRange;
     public float minDistanceBetweenDragPoints = 1f;
-    
+
     public List<Target> targetList = new List<Target>();
-    
+
     [Header("End UI")]
     public CanvasGroup endUI;
+
     public MMF_Player feedback_fadeInEndUI;
     public MMF_Player feedback_fadeOutEndUI;
 
     public Leaderboard endLeaderboard;
 
     [Header("Variables")]
+    public float timedModeTimeLimit = 45f;
+    
     public float endlessModeStartingTimeLimit = 45f;
 
     public int numUnstableDragPoints = 2;
-    
+
     public float timeRemainingWhenBeepsStart = 10f;
     public float timeBetweenBeeps = 1f;
     private float timeUntilBeepTimer = 0f;
 
     [Header("Should be private")]
     public float timer;
+
     public int score;
 
     private bool gameShown = false;
     public bool GameShown => gameShown;
-    
+
     private bool gameStarted = false;
     private bool gameOver = false;
-    
+
     [Header("Name Entry")]
     public TMP_InputField nameInputField;
-    
+
     private string savedName = "";
-    
+
     public string currentName = "";
     public MapType currentMap = MapType.Circle;
     public ModeType currentMode = ModeType.Timed;
@@ -95,35 +102,34 @@ public class GameController : SerializedMonoBehaviour
     private void Awake()
     {
         laserSpawner.SetActive(false);
-        
+
         blackBackground.SetActive(true);
-        
+
         Instance = this;
 
         endUI.alpha = 0f;
         endUI.interactable = false;
         endUI.blocksRaycasts = false;
-        
+
         timer = endlessModeStartingTimeLimit;
         timerText.text = timer.ToString("F1");
-        
+
         mapSelectUI.alpha = 0f;
         mapSelectUI.interactable = false;
         mapSelectUI.blocksRaycasts = false;
-        
+
         savedName = PlayerPrefs.GetString("savedName");
-       
-        
+
         if (savedName != "")
         {
             // Debug.Log("Coming in from save");
-            
+
             currentName = savedName;
             currentMap = (MapType)Enum.Parse(typeof(MapType), PlayerPrefs.GetString("savedMap"));
             currentMode = (ModeType)Enum.Parse(typeof(ModeType), PlayerPrefs.GetString("savedMode"));
 
             startUI.gameObject.SetActive(false);
-            
+
             ShowGame();
         }
         else
@@ -133,10 +139,26 @@ public class GameController : SerializedMonoBehaviour
             startUI.alpha = 0f;
             feedback_fadeInStartUI.PlayFeedbacks();
         }
-        
+
         PlayerPrefs.SetString("savedName", "");
-        
+
         scoreText.text = score.ToString();
+    }
+
+    private void Start()
+    {
+        //For Debug
+        // SelectMode(ModeType.Timed);
+        // SkipToGame();
+    }
+
+    private void SkipToGame()
+    { 
+        feedback_fadeOutStartUI.PlayFeedbacks();
+        startUI.interactable = false;
+        startUI.blocksRaycasts = false;
+        
+        ShowGame();
     }
 
     public void ShowGameFromMainMenu()
@@ -173,7 +195,7 @@ public class GameController : SerializedMonoBehaviour
         switch (modeType)
         {
             case ModeType.Timed:
-                timer = 0;
+                timer = timedModeTimeLimit;
                 break;
             case ModeType.Endless:
                 timer = endlessModeStartingTimeLimit;
@@ -409,37 +431,29 @@ public class GameController : SerializedMonoBehaviour
         if (!gameStarted || gameOver)
             return;
 
-        if (currentMode == ModeType.Timed)
-        {
-            timer += Time.deltaTime;
-            timerText.text = timer.ToString("F1");
-        } 
-        else if (currentMode == ModeType.Endless)
-        {
-            timer -= Time.deltaTime;
-            timerText.text = timer.ToString("F1");
+        timer -= Time.deltaTime;
+        timerText.text = timer.ToString("F1");
         
-            if(timer <= 0)
-            {
-                timer = 0;
-                GameOver();
-            
-                AudioManager.Instance.PlayEvent("event:/timer_final");
+        if(timer <= 0)
+        {
+            timer = 0;
+            GameOver();
+        
+            AudioManager.Instance.PlayEvent("event:/timer_final");
 
-                return;
-            }
-            
-            if(timer <= timeRemainingWhenBeepsStart)
+            return;
+        }
+        
+        if(timer <= timeRemainingWhenBeepsStart)
+        {
+            timeUntilBeepTimer -= Time.deltaTime;
+            if(timeUntilBeepTimer <= 0)
             {
-                timeUntilBeepTimer -= Time.deltaTime;
-                if(timeUntilBeepTimer <= 0)
-                {
-                    feedback_lowTime.PlayFeedbacks();
-                
-                    timeUntilBeepTimer = timeBetweenBeeps;
-                
-                    AudioManager.Instance.PlayEvent("event:/timer_beep");
-                }
+                feedback_lowTime.PlayFeedbacks();
+            
+                timeUntilBeepTimer = timeBetweenBeeps;
+            
+                AudioManager.Instance.PlayEvent("event:/timer_beep");
             }
         }
     }
