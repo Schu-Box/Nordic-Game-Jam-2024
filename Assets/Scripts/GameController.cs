@@ -26,6 +26,7 @@ public class GameController : SerializedMonoBehaviour
     public MMF_Player feedback_fadeOutMapSelectUI;
 
     public List<ModeSelectButton> modeSelectButtonList;
+    public List<MapSelectButton> mapSelectButtonList;
 
     [Header("Gameplay UI")]
     public Leaderboard gameplayLeaderboard;
@@ -185,7 +186,13 @@ public class GameController : SerializedMonoBehaviour
         startUI.interactable = false;
         startUI.blocksRaycasts = false;
 
+        foreach(MapSelectButton mapSelectButton in mapSelectButtonList)
+        {
+            mapSelectButton.DeselectMap();
+        }
+        
         modeSelectButtonList[0].SelectMode();
+        mapSelectButtonList[0].SelectMap();
     }
 
     public void SelectMode(ModeType modeType)
@@ -202,12 +209,19 @@ public class GameController : SerializedMonoBehaviour
                 break;
         }
     }
-    
-    public void SelectMap(MapType mapType)
+
+    private MapSelectButton lastSelectedMapButton = null;
+    public void SelectMap(MapSelectButton mapSelectButton)
     {
-        Debug.Log("Selected map: " + mapType.ToString());
+        Debug.Log("Selected map: " + mapSelectButton.mapType.ToString());
         
-        currentMap = mapType;
+        currentMap = mapSelectButton.mapType;
+
+        if (lastSelectedMapButton != null && lastSelectedMapButton != mapSelectButton)
+        {
+            lastSelectedMapButton.DeselectMap();
+        }
+        lastSelectedMapButton = mapSelectButton;
     }
 
     public void ConfirmMapAndMode()
