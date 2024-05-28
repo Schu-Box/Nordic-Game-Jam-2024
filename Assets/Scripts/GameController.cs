@@ -208,7 +208,10 @@ public class GameController : SerializedMonoBehaviour
         Debug.Log("Selected map: " + mapType.ToString());
         
         currentMap = mapType;
+    }
 
+    public void ConfirmMapAndMode()
+    {
         feedback_fadeOutMapSelectUI.PlayFeedbacks();
         mapSelectUI.interactable = false;
         mapSelectUI.blocksRaycasts = false;
