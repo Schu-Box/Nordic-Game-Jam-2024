@@ -408,13 +408,12 @@ public class GameController : SerializedMonoBehaviour
         }
 
         UpdateTimerVisuals();
+        chargeBar.UpdateBar01(timer / maxTimeLimit);
     }
 
     private void UpdateTimerVisuals()
     {
         timerText.text = timer.ToString("F1");
-        
-        chargeBar.UpdateBar(timer / maxTimeLimit, 0f, maxTimeLimit);
     }
 
 #endregion
@@ -474,6 +473,7 @@ public class GameController : SerializedMonoBehaviour
 
         timer -= Time.deltaTime;
         UpdateTimerVisuals();
+        chargeBar.SetBar01(timer / maxTimeLimit);
         
         if(timer <= 0)
         {
