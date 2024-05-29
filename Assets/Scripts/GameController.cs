@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -33,10 +34,14 @@ public class GameController : SerializedMonoBehaviour
 
     public TextMeshProUGUI playerNameText;
 
+    public TextMeshProUGUI modeText;
+    public TextMeshProUGUI mapText;
+    
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI scoreText;
-
     public MMF_Player feedback_lowTime;
+    
+    public MMProgressBar chargeBar;
 
     [Header("Gameplay")]
     [SerializeField] public Dictionary<MapType, GameObject> mapDictionary = new Dictionary<MapType, GameObject>();
@@ -81,6 +86,7 @@ public class GameController : SerializedMonoBehaviour
     private float timeUntilBeepTimer = 0f;
 
     [Header("Should be private")]
+    private float maxTimeLimit;
     public float timer;
 
     public int score;
@@ -114,6 +120,7 @@ public class GameController : SerializedMonoBehaviour
 
         timer = endlessModeStartingTimeLimit;
         timerText.text = timer.ToString("F1");
+        // chargeBar.BarProgress = 1f;
 
         mapSelectUI.alpha = 0f;
         mapSelectUI.interactable = false;
@@ -208,6 +215,8 @@ public class GameController : SerializedMonoBehaviour
                 timer = endlessModeStartingTimeLimit;
                 break;
         }
+
+        maxTimeLimit = timer;
     }
 
     private MapSelectButton lastSelectedMapButton = null;
@@ -243,6 +252,9 @@ public class GameController : SerializedMonoBehaviour
         
         gameShown = true;
         playerNameText.text = currentName;
+
+        mapText.text = currentMap.ToString();
+        modeText.text = currentMode.ToString();
         
         blackBackground.SetActive(false);
         
@@ -390,7 +402,19 @@ public class GameController : SerializedMonoBehaviour
     {
         timer += time;
         
+        if (timer > maxTimeLimit) //Time can't go above max time
+        {
+            timer = maxTimeLimit;
+        }
+
+        UpdateTimerVisuals();
+    }
+
+    private void UpdateTimerVisuals()
+    {
         timerText.text = timer.ToString("F1");
+        
+        chargeBar.UpdateBar(timer / maxTimeLimit, 0f, maxTimeLimit);
     }
 
 #endregion
@@ -449,7 +473,7 @@ public class GameController : SerializedMonoBehaviour
             return;
 
         timer -= Time.deltaTime;
-        timerText.text = timer.ToString("F1");
+        UpdateTimerVisuals();
         
         if(timer <= 0)
         {
